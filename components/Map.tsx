@@ -13,7 +13,7 @@ const center = {
   lng: -58.563948
 };
 
-function Map() {
+function Map({markers}: {markers: any}) {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: apiKey
@@ -36,7 +36,7 @@ function Map() {
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={10}
+        zoom={9}
         onLoad={onLoad}
         onUnmount={onUnmount}
         options={{
@@ -50,7 +50,20 @@ function Map() {
         }
         }
       >
-      
+      {
+        markers && markers.map((marker: any) => {
+          return (
+            <Marker
+              key={marker.id}
+              position={{lat: marker.location.coordinates[0], lng: marker.location.coordinates[1]}}
+              label={marker.name}
+              onClick={() => {
+                console.log(marker);
+              }}
+            />
+          )
+        })
+      }
         <></>
       </GoogleMap>
   ) : <></>

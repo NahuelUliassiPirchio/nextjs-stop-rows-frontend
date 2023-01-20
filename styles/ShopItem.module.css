@@ -1,0 +1,45 @@
+/* the shop containers has a logo, name and address */
+
+.shopContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  margin: 1rem;
+  background: #fff;
+  transition: all 0.3s ease-in-out;
+}
+
+.shopContainer:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+}
+
+.shopContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.shopContainer h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.75rem;
+  margin: 0;
+  padding: 1rem;
+  color: black;
+}
+
+.shopContainer p {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  margin: 0;
+  padding: 1rem;
+  color: black;
+}
