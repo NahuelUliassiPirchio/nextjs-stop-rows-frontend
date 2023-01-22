@@ -2,23 +2,9 @@ import Map from './Map'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import React from 'react';
 import ShopItem from './ShopItem';
+import { Shop } from '../types';
 
 import styles from '../styles/CustomersMain.module.css'
-
-type Shop = {
-  id: number;
-  name: string;
-  address: string;
-  description: string;
-  email: string;
-  phone: string;
-  website: string;
-  logo: string;
-  location: {
-    type: string;
-    coordinates: number[];
-  }
-}
 
 // export async function getServersideProps(): GetServerSideProps {
 //   const res = await fetch('http://localhost:3000/api/shops')
@@ -42,6 +28,8 @@ function CustomersMain(  ) {
       .then(res => res.json())
       .then(data => {
         setShops(data)
+        console.log(data);
+        
         const markers = data.map( (shop:Shop) => ({
           id: shop.id,
           name: shop.name,

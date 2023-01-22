@@ -1,5 +1,3 @@
-/* the shop containers has a logo, name and address */
-
 .shopContainer {
   display: flex;
   flex-direction: column;

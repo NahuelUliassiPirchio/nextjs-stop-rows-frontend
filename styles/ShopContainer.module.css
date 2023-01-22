@@ -1,0 +1,39 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 50rem;
+}
+.shop {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 2rem 0;
+}
+.shopInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+.shopInfo h2 {
+  margin: 0 0 0.5rem 0;
+}
+.shopInfo p {
+  margin: 0;
+}
+.shopInfo a {
+  color: #000;
+  text-decoration: none;
+}
+
+.shopRow {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 2rem 0;
+}
