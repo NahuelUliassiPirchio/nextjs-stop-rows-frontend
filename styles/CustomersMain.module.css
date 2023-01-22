@@ -27,6 +27,18 @@
   grid-area: map;
 }
 
+.user {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1;
+  padding: .5rem;
+  background-color: black;
+  border-bottom-left-radius: 0.5rem;
+  border-top: 1px solid #e5e5e5;
+  border-left: 1px solid #e5e5e5;
+}
+
 @media (max-width: 768px) {
   .container {
     grid-template-columns: 1fr;

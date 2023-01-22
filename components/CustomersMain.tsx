@@ -5,6 +5,8 @@ import ShopItem from './ShopItem';
 import { Shop } from '../types';
 
 import styles from '../styles/CustomersMain.module.css'
+import useAuth from '../hooks/useAuth';
+import Link from 'next/link';
 
 // export async function getServersideProps(): GetServerSideProps {
 //   const res = await fetch('http://localhost:3000/api/shops')
@@ -22,6 +24,8 @@ function CustomersMain(  ) {
   const [shops, setShops] = React.useState<Shop[]>([])
   const [markers, setMarkers] = React.useState<Shop[]>([])
   const [selectedShop, setSelectedShop] = React.useState<Shop | null>(null)
+
+  const { user, loading } = useAuth()
 
   React.useEffect(() => {
     fetch('http://localhost:3001/shops')
@@ -52,6 +56,22 @@ function CustomersMain(  ) {
         }
       </aside>
       <main>
+        {
+          loading ? <div>Loading...</div> : (
+            <div className={styles.user}>
+            {  
+              user ? (
+                <>
+                  <h1>Welcome {user.name}</h1>
+                  <p>{user.email}</p>
+                </>
+              ) : (
+                <Link href="/login"> Sign in </Link>
+              )
+            }
+            </div>
+          )
+        }
         <Map markers={markers}/>
       </main>
     </div>
