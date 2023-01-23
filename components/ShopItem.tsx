@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
-import styles from '../styles/ShopItem.module.css'
+import styles from '@styles/ShopItem.module.css'
 
 export default function ShopItem( {shop} ) {
   return (

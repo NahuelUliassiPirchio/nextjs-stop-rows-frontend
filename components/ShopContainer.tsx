@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import styles from '../styles/ShopContainer.module.css'
+import styles from '@styles/ShopContainer.module.css'
 import { Shop } from '../types'
 import RowList from './RowList'
 

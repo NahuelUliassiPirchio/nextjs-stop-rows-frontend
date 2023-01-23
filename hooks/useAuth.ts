@@ -27,7 +27,10 @@ const useAuth = () => {
             .then(data => {
                 setUser(data)
             })
-        setLoading(false)
+            .finally(() => {
+                setLoading(false)
+            }
+        )
     }, []);
 
     const login = (accessToken: string, expirationDate: string) => {
@@ -43,7 +46,10 @@ const useAuth = () => {
             .then(data => {
                 setUser(data)
             })
-        setLoading(false)
+            .finally(() => {
+                setLoading(false)
+            }
+        )
     }
 
     const logout = () => {

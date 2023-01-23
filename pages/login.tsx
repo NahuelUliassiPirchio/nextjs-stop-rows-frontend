@@ -1,7 +1,7 @@
 import Router from "next/router"
 import { useRef } from "react"
-import useAuth from "../hooks/useAuth"
-import styles from "../styles/Home.module.css"
+import useAuth from "@hooks/useAuth"
+import styles from "@styles/Home.module.css"
 
 export default function Login() {
     const emailRef = useRef<HTMLInputElement >(null)

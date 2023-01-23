@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import styles from '../styles/RowList.module.css'
+import styles from '@styles/RowList.module.css'
 import { Row } from '../types';
 
 export default function RowList({rowId}: {rowId: string}){

@@ -1,12 +1,13 @@
-import Map from './Map'
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import React from 'react';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import Link from 'next/link';
 import ShopItem from './ShopItem';
 import { Shop } from '../types';
 
-import styles from '../styles/CustomersMain.module.css'
-import useAuth from '../hooks/useAuth';
-import Link from 'next/link';
+import useAuth from '@hooks/useAuth';
+import Map from './Map'
+import Menu from './Menu';
+import styles from '@styles/CustomersMain.module.css'
 
 // export async function getServersideProps(): GetServerSideProps {
 //   const res = await fetch('http://localhost:3000/api/shops')
@@ -20,7 +21,7 @@ import Link from 'next/link';
 //   }
 // }
 
-function CustomersMain(  ) {
+function CustomersMain() {
   const [shops, setShops] = React.useState<Shop[]>([])
   const [markers, setMarkers] = React.useState<Shop[]>([])
   const [selectedShop, setSelectedShop] = React.useState<Shop | null>(null)
@@ -61,12 +62,9 @@ function CustomersMain(  ) {
             <div className={styles.user}>
             {  
               user ? (
-                <>
-                  <h1>Welcome {user.name}</h1>
-                  <p>{user.email}</p>
-                </>
+                <Menu name={user.name}/>
               ) : (
-                <Link href="/login"> Sign in </Link>
+                <Link className={styles.signUp} href="/login"> Sign in </Link>
               )
             }
             </div>

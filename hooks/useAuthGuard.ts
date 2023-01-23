@@ -4,13 +4,15 @@ import useAuth from "./useAuth"
 
 
 const useAuthGuard = (redirectPath: string) => {
-    const { user } = useAuth()
+    const { user, loading } = useAuth()
 
     useEffect(() => {
-        if (!user) {
+        if (!loading && !user) {
             Router.push(redirectPath)
         }
-    }, [user, redirectPath])
+    }
+    , [user, loading])
+
 }
 
 export default useAuthGuard
