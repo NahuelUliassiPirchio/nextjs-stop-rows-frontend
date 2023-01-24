@@ -1,0 +1,53 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.active {
+    color: greenyellow;
+    cursor: pointer;
+}
+
+.inactive {
+    color: red;
+    cursor: pointer;
+}
+
+.shopItem {
+    width: 50vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.shopItem:hover {
+    background-color: rgb(139, 139, 139);
+}
+
+.start {
+    background-color: green;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.stop {
+    background-color: red;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.row {
+    width: 50vw;
+}

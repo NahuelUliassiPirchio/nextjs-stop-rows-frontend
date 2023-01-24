@@ -1,34 +1,31 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { useState, useCallback } from 'react';
 
+interface FetchData {
+    fetcher: () => void;
+    data: any;
+    loading: boolean;
+    error: any;
+}
 
-const useFetch = (url: string, fetchOptions: RequestInit) => {
-    const [data, setData] = useState(null);
-    const [error, setError] = useState<any>(null);
-    const [loading, setLoading] = useState(false);
+const useFetch = (url: string, options: RequestInit = {}): FetchData => {
+  const [data, setData] = useState<any>(null);
+  const [error, setError] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-    const fetchUrl = async () => {
-        setLoading(true);
-        try {
-            const res = await fetch(url,{
-                ...fetchOptions,
-                headers: {
-                    ...fetchOptions.headers,
-                }
-            });
-            const json = await res.json();
-            setData(json);
-        } catch (error) {
-            setError(error);
-        } finally {
-            setLoading(false);
-        }
-    };
+  const fetcher = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(url, options);
+      const json = await response.json();
+      setData(json);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [url, options]);
 
-    useEffect(() => {
-        fetchUrl();
-    }, []);
-
-    return { data, error, loading };
+  return { fetcher, data, loading, error };
 }
 
 export default useFetch;

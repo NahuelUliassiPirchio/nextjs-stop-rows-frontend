@@ -27,14 +27,11 @@
   grid-area: map;
 }
 
-.user {
+.signUp {
   position: absolute;
   top: 1rem;
   right: 1rem;
   z-index: 1;
-}
-
-.signUp {
   padding: .5rem;
   background-color: black;
 }

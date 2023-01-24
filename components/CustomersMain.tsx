@@ -59,15 +59,11 @@ function CustomersMain() {
       <main>
         {
           loading ? <div>Loading...</div> : (
-            <div className={styles.user}>
-            {  
               user ? (
                 <Menu name={user.name}/>
               ) : (
                 <Link className={styles.signUp} href="/login"> Sign in </Link>
               )
-            }
-            </div>
           )
         }
         <Map markers={markers}/>

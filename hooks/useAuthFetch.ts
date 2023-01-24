@@ -1,15 +1,16 @@
+import Cookies from "js-cookie"
 import useAuth from "./useAuth"
 import useFetch from "./useFetch"
 
 
 const useAuthFetch = (url: string, options: RequestInit = {}) => {
-    const { user } = useAuth()
+    const token = Cookies.get('accessToken')
 
     const fetchOptions = {
         ...options,
         headers: {
             ...options.headers,
-            'Authorization': `Bearer ${user?.accessToken}`
+            'Authorization': `Bearer ${token}`
         }
     }
 
