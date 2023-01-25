@@ -12,11 +12,11 @@ const useAuth = () => {
             return
         }
 
-        // const expirationDate = new Date(Cookie.get("expirationDate") as string)
-        // if (expirationDate < new Date()) {
-        //     logout()
-        //     return
-        // }
+        const expirationDate = parseInt(Cookie.get("expirationDate") || "0")
+        if (expirationDate * 1000 < Date.now()) {
+            logout()
+            return
+        }
 
         fetch("http://localhost:3001/profile", {
             headers: {

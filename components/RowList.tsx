@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import styles from '@styles/RowList.module.css'
 import { Row } from '../types';
 
-export default function RowList({rowId}: {rowId: string}){
+export default function RowList({rowId, displayIfNull}: {rowId: string, displayIfNull?: boolean}){
+
     const [row, setRow] = useState<Row>();
 
     useEffect(() => {
@@ -27,9 +28,10 @@ export default function RowList({rowId}: {rowId: string}){
               </div>
             ))
           ) : (
-            <div className={styles.row}>
+            displayIfNull && 
+            (<div className={styles.row}>
               <p>No customers in this row</p>
-            </div>
+            </div>)
           )}
       </div>
     )

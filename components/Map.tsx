@@ -1,5 +1,6 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { GoogleMap, InfoBox, InfoWindow, Marker, useJsApiLoader } from '@react-google-maps/api';
+import { Shop } from 'types';
 
 const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''
 
@@ -13,7 +14,7 @@ const center = {
   lng: -58.563948
 };
 
-function Map({markers}: {markers: any}) {
+function Map({shops = [], selectedMarker, onMarkerClick, setMapRef}: {shops: Shop[], selectedMarker: Shop | null, onMarkerClick: (shop: Shop) => void, setMapRef: (mapRef: any) => void}) {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: apiKey
@@ -36,6 +37,7 @@ function Map({markers}: {markers: any}) {
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
+        ref={(mapRef)=> mapRef && setMapRef(mapRef)}
         zoom={9}
         onLoad={onLoad}
         onUnmount={onUnmount}
@@ -51,14 +53,14 @@ function Map({markers}: {markers: any}) {
         }
       >
       {
-        markers && markers.map((marker: any) => {
+        shops && shops.map((shop: Shop) => {
           return (
             <Marker
-              key={marker.id}
-              position={{lat: marker.location.coordinates[0], lng: marker.location.coordinates[1]}}
-              label={marker.name}
+              key={shop.id}
+              position={{lat: shop.location.coordinates[0], lng: shop.location.coordinates[1]}}
+              label={shop.name}
               onClick={() => {
-                console.log(marker);
+                onMarkerClick(shop)
               }}
             />
           )

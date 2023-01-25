@@ -43,7 +43,8 @@ export default function Login() {
             }
             else {
                 console.log(data);
-                login(data.token, data.expires_in)
+                const expires_in = new Date().getTime() + data.expires_in * 1000
+                login(data.token.token, expires_in.toString())
             }
         })
         .catch(err => {

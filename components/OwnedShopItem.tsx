@@ -22,12 +22,16 @@ export default function OwnedShopItem( {shop}:{shop:Shop}) {
         }
     })
     
-    useCallback(() => {
+
+    //TODO: fix this
+    useEffect(() => {
         if (shop.row) {
             fetcher();
-            setStatus(row.status);
+            if (row) {
+                setStatus(row.status);
+            }
         }
-    }, [shop.row])
+    }, [shop.row, status])
 
 
 
@@ -92,7 +96,9 @@ export default function OwnedShopItem( {shop}:{shop:Shop}) {
                 }
             </div>
             <div className={styles.row}>
-                <RowList rowId={shop.row} />
+                {
+                    shop.row && <RowList rowId={shop.row} />
+                }
             </div>
         </>
     )
