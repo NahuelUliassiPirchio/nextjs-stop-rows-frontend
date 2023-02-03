@@ -1,38 +1,29 @@
 import React, { useEffect } from 'react';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import ShopItem from './ShopItem';
+import Cookies from 'js-cookie';
+
 import { Shop } from '../types';
+import ShopItem from './ShopItem';
 
 import useAuth from '@hooks/useAuth';
 import Map from './Map'
 import Menu from './Menu';
 import styles from '@styles/CustomersMain.module.css'
 import RowList from './RowList';
-import { GoogleMap } from '@react-google-maps/api';
-import Cookies from 'js-cookie';
-
-// export async function getServersideProps(): GetServerSideProps {
-//   const res = await fetch('http://localhost:3000/api/shops')
-//   const shops = await res.json()
-//   console.log(shops);
-  
-//   return {
-//     props: {
-//       shops
-//     }
-//   }
-// }
+import useGetShops from '@hooks/useShops';
+import Loading from './Loading';
 
 function CustomersMain() {
   const { user, loading } = useAuth()
 
-  const [shops, setShops] = React.useState<Shop[]>([])
-  const [markers, setMarkers] = React.useState<Shop[]>([])
-  const [mapRef, setMapRef] = React.useState<GoogleMap | null>(null)
-
   const [selectedShop, setSelectedShop] = React.useState<Shop | null>(null)
   const [selectedMarker, setSelectedMarker] = React.useState<Shop | null>(null)
+
+  const [center, setCenter] = React.useState({lat: -34.609607, lng: -58.388660})
+  const [location, setLocation] = React.useState({lat: -34.609607, lng: -58.388660})
+  
+  const [page, setPage] = React.useState(1)
+  const {loading: shopsLoading, error, data: shops, hasMore} = useGetShops(page, location)
 
   useEffect(() => {
     if (selectedMarker) {
@@ -43,30 +34,47 @@ function CustomersMain() {
   useEffect(() => {
     if (selectedShop) {
       setSelectedMarker(selectedShop)
-      console.log(selectedShop);
-      
-      // if (mapRef) {
-      //   mapRef.panTo({lat: 0, lng: -50})
-      // }
+      setCenter({lat: selectedShop.location.coordinates[0], lng: selectedShop.location.coordinates[1]})
     }
-  }, [selectedShop, mapRef])
+  }, [selectedShop])
 
   const handleMarkerClick = (shop:Shop) => {
     setSelectedMarker(shop)
+    const shopItem = document.getElementById(`shop-${shop.id}`)
+    if (shopItem) {
+      shopItem.scrollIntoView({behavior: 'smooth'})
+    }
   }
 
   const handleShopClick = (shop:Shop) => {
     setSelectedShop(shop)
+    const shopItem = document.getElementById(`shop-${shop.id}`)
+    if (shopItem) {
+      shopItem.scrollIntoView({behavior: 'smooth'})
+    }
   }
 
   React.useEffect(() => {
-    fetch('http://localhost:3001/shops')
-      .then(res => res.json())
-      .then(data => {
-        setShops(data)
-      })
-
+    window.navigator.geolocation.watchPosition((position) => {
+        setCenter({lat: position.coords.latitude, lng: position.coords.longitude})
+        setLocation({lat: position.coords.latitude, lng: position.coords.longitude})
+    })
   }, [])
+
+  const observer = React.useRef<IntersectionObserver>()
+  const lastShopElementRef = React.useCallback(node => {
+    if (shopsLoading) return
+    if (observer.current) observer.current.disconnect()
+    observer.current = new IntersectionObserver(entries => {
+      
+      
+      if (entries[0].isIntersecting && hasMore && !shopsLoading) {
+        console.log(entries);
+        setPage(prevPage => prevPage + 1)
+      }
+    }, {threshold: 1})
+    if(node) observer.current.observe(node)
+  }, [hasMore, shopsLoading])
 
   const token = Cookies.get('access_token')
 
@@ -88,12 +96,19 @@ function CustomersMain() {
   return (
     <div className={styles.container}>
       <aside className={styles.aside}>
-        <h1>Shops</h1>
-        {
-          shops && shops.map( (shop:any) => (
-            <ShopItem key={shop.id} shop={shop} onItemClick={handleShopClick}  />
-          ))
-        }
+        <>
+          <h1>Shops</h1>
+          {
+            shops && shops.map( (shop:any, index: number) => {
+              if (index === shops.length - 1) {
+                return <ShopItem key={shop.id} shop={shop} ref={lastShopElementRef} onItemClick={handleShopClick} />
+              } else {
+                return <ShopItem key={shop.id} shop={shop} onItemClick={handleShopClick} ref={null} />
+              }
+            })
+          }
+          {hasMore && <Loading />}
+        </>
       </aside>
       <main>
         {
@@ -105,7 +120,7 @@ function CustomersMain() {
               )
           )
         }
-        <Map shops={shops} selectedMarker={selectedMarker} onMarkerClick={handleMarkerClick} setMapRef={setMapRef}/>
+        <Map shops={shops} selectedMarker={selectedMarker} onMarkerClick={handleMarkerClick} center={center}/>
         {
           loading ? <div>Loading...</div> : (
             user?.row && (

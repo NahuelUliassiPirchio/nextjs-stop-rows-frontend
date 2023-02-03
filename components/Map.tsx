@@ -9,12 +9,7 @@ const containerStyle = {
   height: '100vh'
 };
 
-const center = {
-  lat: -34.641440,
-  lng: -58.563948
-};
-
-function Map({shops = [], selectedMarker, onMarkerClick, setMapRef}: {shops: Shop[], selectedMarker: Shop | null, onMarkerClick: (shop: Shop) => void, setMapRef: (mapRef: any) => void}) {
+function Map({shops = [], selectedMarker, onMarkerClick, center}: {shops: Shop[], selectedMarker: Shop | null, onMarkerClick: (shop: Shop) => void, center: {lat: number, lng: number}}) {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: apiKey
@@ -37,8 +32,7 @@ function Map({shops = [], selectedMarker, onMarkerClick, setMapRef}: {shops: Sho
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        ref={(mapRef)=> mapRef && setMapRef(mapRef)}
-        zoom={9}
+        zoom={8}
         onLoad={onLoad}
         onUnmount={onUnmount}
         options={{

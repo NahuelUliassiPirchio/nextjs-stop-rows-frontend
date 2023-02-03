@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Cookies from 'js-cookie';
 import useAuth from '@hooks/useAuth';
 
-export default function ShopItem( {shop, onItemClick}: {shop: Shop, onItemClick: (shop:Shop) => void} ) {
+const ShopItem = ({shop, onItemClick}, ref) => {
 
   const [data, setData] = React.useState<any>(null)
   const token = Cookies.get('access_token')
@@ -31,7 +31,7 @@ export default function ShopItem( {shop, onItemClick}: {shop: Shop, onItemClick:
   }
 
   return (
-    <div className={styles.shopContainer} onClick={()=> onItemClick(shop)}>
+    <div id={`shop-${shop.id}`} className={styles.shopContainer} onClick={()=> onItemClick(shop)} ref={ref}>
       <Image src={shop.logo} alt={shop.name} width={100} height={100} />
       <h2>{shop.name}</h2>
       <p>{shop.address}</p>
@@ -45,3 +45,5 @@ export default function ShopItem( {shop, onItemClick}: {shop: Shop, onItemClick:
     </div>
   )
 }
+
+export default React.forwardRef(ShopItem)
