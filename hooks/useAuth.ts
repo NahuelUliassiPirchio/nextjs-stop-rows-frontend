@@ -23,9 +23,17 @@ const useAuth = () => {
                 'Authorization': `Bearer ${accessToken}`
             }
         })  
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error("Not authorized")
+                return res.json()
+            })
             .then(data => {
                 setUser(data)
+            })
+            .catch(err => {
+                if (err.message === "Not authorized") {
+                    logout()
+                }                
             })
             .finally(() => {
                 setLoading(false)
@@ -34,6 +42,7 @@ const useAuth = () => {
     }, []);
 
     const login = (accessToken: string, expirationDate: string) => {
+        setLoading(true)
         Cookie.set("accessToken", accessToken)
         Cookie.set("expirationDate", expirationDate)
 

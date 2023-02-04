@@ -34,7 +34,7 @@ function CustomersMain() {
   useEffect(() => {
     if (selectedShop) {
       setSelectedMarker(selectedShop)
-      setCenter({lat: selectedShop.location.coordinates[0], lng: selectedShop.location.coordinates[1]})
+      setCenter({lat: selectedShop.location.coordinates[1], lng: selectedShop.location.coordinates[0]})
     }
   }, [selectedShop])
 

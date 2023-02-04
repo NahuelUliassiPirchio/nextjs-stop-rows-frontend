@@ -1,14 +1,15 @@
 import Router from "next/router"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import useAuth from "@hooks/useAuth"
 import styles from "@styles/Home.module.css"
+import Link from "next/link"
 
 export default function Login() {
     const emailRef = useRef<HTMLInputElement >(null)
-    const passwordRef = useRef<HTMLInputElement>(null)   
+    const passwordRef = useRef<HTMLInputElement>(null)
+    const [error, setError] = useState<string | null>(null)
     
     const {user, loading, login} = useAuth()
-//    if (loading) return <div>Loading...</div>
 
     if (user) Router.push("/")
 
@@ -43,13 +44,13 @@ export default function Login() {
             }
             else {
                 console.log(data);
-                const expires_in = new Date().getTime() + data.expires_in * 1000
-                login(data.token.token, expires_in.toString())
+                const expires_in = new Date().getTime() + data.expiresIn * 1000
+                login(data.token, expires_in.toString())
+                if(!loading) Router.push("/")
             }
         })
         .catch(err => {
-            // set error
-            alert(err)
+            setError(err.message)
         })
         Router.push("/login")
     }
@@ -57,11 +58,13 @@ export default function Login() {
     return (
         <div className={styles.container}>
             <h1>Login</h1>
+            {error && <p className={styles.error}>{error}</p>}
             <form>
                 <input type="email" placeholder="email" ref={emailRef} />
                 <input type="password" placeholder="*******" ref={passwordRef} />
-                <button type="submit" onClick={handleSubmit}>Login</button>
+                <input className={styles.submit} type="submit" onClick={handleSubmit} value="Login"/>
             </form>
+            <p>{"Don't have an account?"} <Link href="/signup">Sign Up</Link></p>
         </div>
     )
 }

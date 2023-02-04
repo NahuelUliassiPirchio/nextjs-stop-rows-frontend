@@ -14,9 +14,9 @@ export default function useGetShops(page: number, location: {lat: number, lng: n
         setError('')
 
         const controller = new AbortController()
-        const signal = controller.signal
+        const {signal} = controller
 
-        fetch(`http://localhost:3001/shops?limit=${limit}&page=${page}&lng=${location.lng}&lat=${location.lat}`, {
+        fetch(`http://localhost:3001/shops?limit=${limit}&page=${page}`, {
             signal
         })
         .then(res=> {
@@ -39,7 +39,7 @@ export default function useGetShops(page: number, location: {lat: number, lng: n
         return () => {
             controller.abort()
         }
-    },[page,location])
+    },[page])
 
     return {loading, error, hasMore, data}
 }

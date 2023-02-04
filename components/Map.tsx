@@ -51,7 +51,7 @@ function Map({shops = [], selectedMarker, onMarkerClick, center}: {shops: Shop[]
           return (
             <Marker
               key={shop.id}
-              position={{lat: shop.location.coordinates[0], lng: shop.location.coordinates[1]}}
+              position={{lat: shop.location.coordinates[1], lng: shop.location.coordinates[0]}}
               label={shop.name}
               onClick={() => {
                 onMarkerClick(shop)
