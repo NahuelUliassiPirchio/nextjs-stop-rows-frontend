@@ -5,6 +5,7 @@ import useAuth from '@hooks/useAuth';
 import Menu from './Menu';
 import styles from '@styles/OwnersMain.module.css'
 import OwnedShopItem from './OwnedShopItem';
+import Link from 'next/link';
 
 export default function OwnersMain() {
     const { user, loading } = useAuth()
@@ -18,6 +19,7 @@ export default function OwnersMain() {
             <div className={styles.main}>
                 <div className={styles.shops}>
                     <h2>Your shops</h2>
+                    <Link href='/new-shop'>+</Link>
                     <ul>
                         {shops.map((shop: Shop) => (
                             <OwnedShopItem key={shop.id} shop={shop} />

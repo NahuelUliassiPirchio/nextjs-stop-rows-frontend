@@ -6,6 +6,7 @@ import useAuthFetch from "@hooks/useAuthFetch";
 import RowList from "./RowList";
 import Cookies from "js-cookie";
 import useFetch from "@hooks/useFetch";
+import ShopForm from "./ShopForm";
 
 export default function OwnedShopItem( {shop}:{shop:Shop}) {
     const [isFetching, setIsFetching] = useState(false);
@@ -15,6 +16,7 @@ export default function OwnedShopItem( {shop}:{shop:Shop}) {
     
     
     const [status, setStatus] = useState(shop.row ? 'active' : 'inactive')
+    const [edit, setEdit] = useState(false);
     const {data: row, error: rowError, fetcher, loading: rowLoading} = useFetch(`http://localhost:3001/rows/${shop.row}`, {
         method: 'GET',
         headers: {
@@ -94,6 +96,11 @@ export default function OwnedShopItem( {shop}:{shop:Shop}) {
                         <button className={styles.start} onClick={()=>handleClick('start')}>Start</button>
                     )
                 }
+                <button className={styles.edit} onClick={()=>setEdit(true)}>Edit</button>
+                {
+                    edit && <ShopForm shop={shop} setEdit={setEdit} />
+                }
+                
             </div>
             <div className={styles.row}>
                 {
