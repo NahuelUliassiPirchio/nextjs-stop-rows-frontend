@@ -16,6 +16,7 @@ type Shop = {
 
   type Row = {
     id: string;
+    status: string;
     customers: any[];
     date : Date;
     shop: Shop;

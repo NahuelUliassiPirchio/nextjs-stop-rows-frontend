@@ -12,10 +12,26 @@ const useAuth = () => {
             return
         }
 
-        const expirationDate = parseInt(Cookie.get("expirationDate") || "0")
-        if (expirationDate * 1000 < Date.now()) {
-            logout()
-            return
+        const expirationDate = parseInt(Cookie.get("expirationDate") || "")
+        
+        if (expirationDate < Date.now()) {
+            const refreshToken = Cookie.get("refreshToken")
+            fetch("http://localhost:3001/auth/refresh", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${refreshToken}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.accessToken) {
+                    Cookie.set("accessToken", data.accessToken)
+                    Cookie.set("expirationDate", data.expirationDate)
+                } else {
+                    logout()
+                }
+            })
         }
 
         fetch("http://localhost:3001/profile", {
@@ -41,10 +57,14 @@ const useAuth = () => {
         )
     }, []);
 
-    const login = (accessToken: string, expirationDate: string) => {
+    const login = (refreshToken: string, accessToken: string, expiresIn: string) => {
         setLoading(true)
+
+        const expirationDate = Date.now() + Number(expiresIn) * 1000
+
+        Cookie.set("refreshToken", refreshToken)
         Cookie.set("accessToken", accessToken)
-        Cookie.set("expirationDate", expirationDate)
+        Cookie.set("expirationDate", expirationDate.toString())
 
         fetch("http://localhost:3001/profile", {
             headers: {
@@ -62,6 +82,7 @@ const useAuth = () => {
     }
 
     const logout = () => {
+        Cookie.remove("refreshToken")
         Cookie.remove("accessToken")
         Cookie.remove("expirationDate")
         setLoading(false)

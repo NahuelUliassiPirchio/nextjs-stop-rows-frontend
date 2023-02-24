@@ -17,7 +17,6 @@
 }
 
 .shopItem {
-    width: 50vw;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -28,8 +27,20 @@
     margin: 10px 0;
 }
 
-.shopItem:hover {
-    background-color: rgb(139, 139, 139);
+.leftContainer {
+    width: 30%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.rightContainer {
+    width: 30%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 20rem;
 }
 
 .start {

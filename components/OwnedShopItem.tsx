@@ -1,39 +1,34 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { Shop } from "types";
-import styles from "@styles/OwnedShopItem.module.css";
-import useAuthFetch from "@hooks/useAuthFetch";
+import { Shop, Row } from "types";
 import RowList from "./RowList";
 import Cookies from "js-cookie";
 import useFetch from "@hooks/useFetch";
 import ShopForm from "./ShopForm";
+import styles from "@styles/OwnedShopItem.module.css";
 
 export default function OwnedShopItem( {shop}:{shop:Shop}) {
     const [isFetching, setIsFetching] = useState(false);
     const [action, setAction] = useState('start');
-    const [data, setData] = useState(null);
+    const [row, setRow] = useState<Row | null>(null);
     const [error, setError] = useState<Error|null>(null);
     
-    
-    const [status, setStatus] = useState(shop.row ? 'active' : 'inactive')
     const [edit, setEdit] = useState(false);
-    const {data: row, error: rowError, fetcher, loading: rowLoading} = useFetch(`http://localhost:3001/rows/${shop.row}`, {
+    const {data: initialRow, error: rowError, fetcher, loading: rowLoading} = useFetch(`http://localhost:3001/rows/${shop.row}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         }
     })
     
-
-    //TODO: fix this
     useEffect(() => {
         if (shop.row) {
             fetcher();
-            if (row) {
-                setStatus(row.status);
+            if (initialRow && !rowLoading) {
+                setRow(initialRow);
             }
         }
-    }, [shop.row, status])
+    }, [])
 
 
 
@@ -42,7 +37,14 @@ export default function OwnedShopItem( {shop}:{shop:Shop}) {
     const handleClick = async (newAction: string) => {
         setIsFetching(true);
         setAction(newAction);
-        const method = newAction === 'start' ? 'POST' : (newAction === 'finish' ? 'DELETE' : 'PUT');
+
+        let method = 'PUT'
+        if (newAction === 'finish') {
+            method = 'DELETE';
+        } else if (newAction === 'start') {
+            method = 'POST';
+        }
+
         try {
             const response = await fetch(`http://localhost:3001/shops/${shop.id}/rows/${newAction}`, {
                 method,
@@ -51,11 +53,14 @@ export default function OwnedShopItem( {shop}:{shop:Shop}) {
                     'Authorization': `Bearer ${token}`
                 }
             });
+            if(!response.ok) {
+                throw new Error('Something went wrong');
+            }
             const data = await response.json();
-            // console.log(data);
-            
-            setData(data);
-            setStatus(data.message);
+            if (newAction === 'finish') {
+                setRow(null);
+            } else setRow(data);
+                
         } catch (error: any) {
             setError(error);
         } finally {
@@ -71,37 +76,50 @@ export default function OwnedShopItem( {shop}:{shop:Shop}) {
         {
             error && <p>{error.message}</p>
         }
-            <div className={styles.shopItem}>     
-                <p className={
-                    shop.row ? styles.active : styles.inactive
-                }
-                >·</p>
-                <h3>{shop.name}</h3>
-                <p>{shop.address}</p>
-                {
-                    shop.row ? (
-                        !rowLoading && (
-                        <>
-                            {
-                                status === 'open' ? (
-                                    <button className={styles.stop} onClick={()=>handleClick('stop')}>Stop</button>
-                                ) : (
-                                    <button className={styles.start} onClick={()=>handleClick('resume')}>Resume</button>
-                                )
-                            }
-                            <button className={styles.stop} onClick={()=>handleClick('finish')}>Finish</button>
-                        </>
-                        )
-                    ) : (
-                        <button className={styles.start} onClick={()=>handleClick('start')}>Start</button>
-                    )
-                }
-                <button className={styles.edit} onClick={()=>setEdit(true)}>Edit</button>
-                {
-                    edit && <ShopForm shop={shop} setEdit={setEdit} />
-                }
+            <li className={styles.shopItem}>     
                 
-            </div>
+                <div className={styles.leftContainer}>
+                    <p className={
+                        shop.row ? styles.active : styles.inactive
+                    }
+                    >·</p>
+                    <h3>{shop.name}</h3>
+                    <p>{shop.address}</p>
+                    {
+                        !rowLoading && (
+                            row && (
+                                <p>{row.status}</p>
+                            )
+                        )
+                    }
+                </div>
+                
+                <div className={styles.rightContainer}>
+                    {
+                        row ? (
+                            !rowLoading && (
+                            <>
+                                {
+                                    row.status === 'open' ? (
+                                        <button className={styles.stop} onClick={()=>handleClick('stop')}>Stop</button>
+                                    ) : (
+                                        <button className={styles.start} onClick={()=>handleClick('resume')}>Resume</button>
+                                    )
+                                }
+                                <button className={styles.stop} onClick={()=>handleClick('finish')}>Finish</button>
+                            </>
+                            )
+                        ) : (
+                            <button className={styles.start} onClick={()=>handleClick('start')}>Start</button>
+                        )
+                    }
+                    <button className={styles.edit} onClick={()=>setEdit(true)}>Edit</button>
+                    {
+                        edit && <ShopForm shop={shop} setEdit={setEdit} />
+                    }
+                </div>
+                
+            </li>
             <div className={styles.row}>
                 {
                     shop.row && <RowList rowId={shop.row} />

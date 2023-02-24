@@ -1,8 +1,8 @@
 import Router from "next/router"
+import Link from "next/link"
 import { useRef, useState } from "react"
 import useAuth from "@hooks/useAuth"
 import styles from "@styles/Home.module.css"
-import Link from "next/link"
 
 export default function Login() {
     const emailRef = useRef<HTMLInputElement >(null)
@@ -44,8 +44,7 @@ export default function Login() {
             }
             else {
                 console.log(data);
-                const expires_in = new Date().getTime() + data.expiresIn * 1000
-                login(data.token, expires_in.toString())
+                login(data.refreshToken, data.accessToken.token, data.accessToken.expiresIn)
                 if(!loading) Router.push("/")
             }
         })
@@ -59,7 +58,7 @@ export default function Login() {
         <div className={styles.container}>
             <h1>Login</h1>
             {error && <p className={styles.error}>{error}</p>}
-            <form>
+            <form className={styles.loginForm}>
                 <input type="email" placeholder="email" ref={emailRef} />
                 <input type="password" placeholder="*******" ref={passwordRef} />
                 <input className={styles.submit} type="submit" onClick={handleSubmit} value="Login"/>

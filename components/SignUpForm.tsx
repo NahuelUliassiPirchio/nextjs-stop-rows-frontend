@@ -38,9 +38,7 @@ export default function SignUpForm() {
             setError(data.message)
         } else {
             setError('')
-            login(data.token, data.expiresIn)
-            const expires_in = new Date().getTime() + data.expiresIn * 1000
-            login(data.token, expires_in.toString())
+            login(data.refreshToken, data.accessToken.token, data.accessToken.expiresIn)
             if(!loading) Router.push("/")
         }
     }

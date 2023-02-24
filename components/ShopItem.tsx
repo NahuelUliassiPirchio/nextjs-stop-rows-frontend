@@ -9,11 +9,11 @@ import useAuth from '@hooks/useAuth';
 const ShopItem = ({shop, onItemClick}, ref) => {
 
   const [data, setData] = React.useState<any>(null)
-  const token = Cookies.get('access_token')
   const {user} = useAuth()
-
+  
   const joinHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
+    const token = Cookies.get('access_token')
     const response = await fetch(`http://localhost:3001/rows/${shop.row}/join`, {
       method: 'POST',
       headers: {
@@ -22,12 +22,12 @@ const ShopItem = ({shop, onItemClick}, ref) => {
       },
       body: JSON.stringify({userId: user?.id})
     })
+    if (!response.ok) {
+      console.log(response);
+      alert('Something went wrong')
+    }
     const data = await response.json()
     setData(data)
-    if (data.error) {
-      alert(data.error)
-    }
-    
   }
 
   return (

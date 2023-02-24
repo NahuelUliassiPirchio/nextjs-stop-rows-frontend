@@ -1,0 +1,22 @@
+.shops {
+    min-width: 3rem;
+    margin: auto 1rem;
+}
+
+.title {
+    display: inline-block;
+    margin-right: 1rem;
+}
+
+.newShop {
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid #ccc;
+    padding: 0 .5rem;
+    cursor: pointer;
+}
+
+.newShop:hover {
+    background-color: #ccc;
+    color: black;
+}
