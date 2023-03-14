@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Cookie from "js-cookie";
+import endpoints from "@common/endpoints";
 
 const useAuth = () => {
     const [user, setUser] = useState<any>(null);
@@ -13,10 +14,14 @@ const useAuth = () => {
         }
 
         const expirationDate = parseInt(Cookie.get("expirationDate") || "")
-        
+
         if (expirationDate < Date.now()) {
             const refreshToken = Cookie.get("refreshToken")
-            fetch("http://localhost:3001/auth/refresh", {
+            if (!refreshToken) {
+                logout()
+                return
+            }
+            fetch(endpoints.auth.refresh, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${refreshToken}`,
@@ -32,9 +37,13 @@ const useAuth = () => {
                     logout()
                 }
             })
+            .catch(err => {
+                logout()
+            }
+        )
         }
 
-        fetch("http://localhost:3001/profile", {
+        fetch(endpoints.profile, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
@@ -66,7 +75,7 @@ const useAuth = () => {
         Cookie.set("accessToken", accessToken)
         Cookie.set("expirationDate", expirationDate.toString())
 
-        fetch("http://localhost:3001/profile", {
+        fetch(endpoints.profile, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }

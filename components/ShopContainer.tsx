@@ -1,18 +1,16 @@
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
-import styles from '@styles/ShopContainer.module.css'
-import { Shop } from '../types'
+import { Shop } from '@common/types'
 import RowList from './RowList'
+import styles from '@styles/ShopContainer.module.css'
 
 export default function ShopContainer({shop}: {shop: Shop}) {
   
   return (
-    <div className={styles.container}>
+    <section className={styles.container}>
       <div className={styles.shop}>
-        <div className={styles.shopImage}>
-          <Image src={shop.logo} alt={shop.name} width={200} height={200} />
-        </div>
+        <Image className={styles.shopImage} src={shop.logo} alt={shop.name} width={150} height={150} />
         <div className={styles.shopInfo}>
+          <h2>Shop Info:</h2>
           <h1>{shop.name}</h1>
           <p>{shop.address}</p>
           <p>{shop.description}</p>
@@ -21,10 +19,10 @@ export default function ShopContainer({shop}: {shop: Shop}) {
           <p>{shop.website}</p>
         </div>
       </div>
-        <div className={styles.shopRow}>
-          <h2>Customers</h2>
-          <RowList rowId={shop.row} />
-        </div>
-    </div>
+      <div className={styles.shopRow}>
+        <h2>Row</h2>
+        <RowList rowId={shop.row} />
+      </div>
+    </section>
   )
 }

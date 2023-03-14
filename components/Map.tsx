@@ -1,6 +1,6 @@
-import { memo, useCallback, useEffect, useState } from 'react'
-import { GoogleMap, InfoBox, InfoWindow, Marker, useJsApiLoader } from '@react-google-maps/api';
-import { Shop } from 'types';
+import { memo, useCallback, useState } from 'react'
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import { Shop } from '@common/types';
 
 const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''
 
@@ -9,7 +9,7 @@ const containerStyle = {
   height: '100vh'
 };
 
-function Map({shops = [], selectedMarker, onMarkerClick, center}: {shops: Shop[], selectedMarker: Shop | null, onMarkerClick: (shop: Shop) => void, center: {lat: number, lng: number}}) {
+function Map({shops = [], onMarkerClick, center}: {shops: Shop[], onMarkerClick: (shop: Shop) => void, center: {lat: number, lng: number}}) {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: apiKey
@@ -17,9 +17,8 @@ function Map({shops = [], selectedMarker, onMarkerClick, center}: {shops: Shop[]
 
   const [map, setMap] = useState(null)
 
-  const onLoad = useCallback(function callback(map:any) {
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
+  const onLoad = useCallback(function callback(map: any) {
+    map.setZoom(14);
 
     setMap(map)
   }, [])
@@ -32,7 +31,6 @@ function Map({shops = [], selectedMarker, onMarkerClick, center}: {shops: Shop[]
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={8}
         onLoad={onLoad}
         onUnmount={onUnmount}
         options={{

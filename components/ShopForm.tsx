@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Shop } from "types";
+import { Shop } from "@common/types";
 import styles from "@styles/ShopForm.module.css";
+import endpoints from "@common/endpoints";
 
 
 export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any }) {
@@ -18,7 +19,7 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
 
     const handleSubmit = (e: any) => {
         e.preventDefault()
-        let shopURL = 'http://localhost:3001/shops'
+        let shopURL = endpoints.shops.getShops
         let method = 'POST'
         if (shop) {
             method = 'PUT'

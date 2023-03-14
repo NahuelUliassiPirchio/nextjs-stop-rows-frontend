@@ -14,14 +14,14 @@
 
 .menuDropdown {
     position: absolute;
-    top: 4.3rem;
-    right: 1rem;
+    top: 4rem;
+    right: -0.5rem;
     z-index: 1;
-    width: 100%;
+    width: fit-content;
     background-color: #f5f5f5;
     color: black;
     border: 1px solid #e5e5e5;
-    border-radius: 0 0 5px 5px;
+    border-radius: 5px;
     overflow: hidden;
 }
 

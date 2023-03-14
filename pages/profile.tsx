@@ -2,6 +2,8 @@ import useAuth from "@hooks/useAuth";
 import useAuthGuard from "@hooks/useAuthGuard";
 import { useState } from "react";
 import styles from "@styles/Profile.module.css";
+import Head from "next/head";
+import endpoints from "@common/endpoints";
 
 export default function Profile() {
     const { user, loading } = useAuth()
@@ -16,7 +18,7 @@ export default function Profile() {
 
     const handleSave = async (e: React.SyntheticEvent) => {
         const token = localStorage.getItem('token')
-        await fetch('http://localhost:3000/profile', {
+        await fetch(endpoints.profile, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -31,6 +33,11 @@ export default function Profile() {
     }
     
     return (
+        <>
+        <Head>
+            <title>Profile</title>
+        </Head>
+        {
         loading ? (
             <div className={styles.loading}>
                     <h1>Loading...</h1>
@@ -54,5 +61,6 @@ export default function Profile() {
                         </div>
                     )
             )
+        }</>
     )
 }

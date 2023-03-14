@@ -1,10 +1,12 @@
 import Image from 'next/image';
 import React from 'react';
 import styles from '@styles/ShopItem.module.css'
-import { Shop } from 'types';
+import { Shop } from '@common/types';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 import useAuth from '@hooks/useAuth';
+import Router from 'next/router';
+import endpoints from '@common/endpoints';
 
 const ShopItem = ({shop, onItemClick}, ref) => {
 
@@ -13,14 +15,15 @@ const ShopItem = ({shop, onItemClick}, ref) => {
   
   const joinHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
-    const token = Cookies.get('access_token')
-    const response = await fetch(`http://localhost:3001/rows/${shop.row}/join`, {
+    if (!user) return Router.push('/login')
+    const token = Cookies.get('accessToken')
+
+    const response = await fetch(endpoints.rows.join(shop.row), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({userId: user?.id})
     })
     if (!response.ok) {
       console.log(response);
@@ -28,6 +31,8 @@ const ShopItem = ({shop, onItemClick}, ref) => {
     }
     const data = await response.json()
     setData(data)
+
+    Router.reload()
   }
 
   return (

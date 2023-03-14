@@ -1,9 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import styles from '@styles/Menu.module.css';
 import useAuth from '@hooks/useAuth';
-import Router from 'next/router';
+import styles from '@styles/Menu.module.css';
 
 export default function Menu( {name} ) {
     const [isOpen, setIsOpen] = React.useState(false)
@@ -28,10 +27,10 @@ export default function Menu( {name} ) {
                     <div className={styles.menuDropdown}>
                         <ul>
                             <li>
-                                <Link href="/profile"> Profile </Link>
+                                <Link href="/profile">Profile</Link>
                             </li>
                             <li>
-                                <Link href='/' onClick={handleLogout}> Logout </Link>
+                                <Link href='/' onClick={handleLogout}>Logout</Link>
                             </li>
                         </ul>
                     </div>

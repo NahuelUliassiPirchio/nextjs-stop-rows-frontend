@@ -1,3 +1,7 @@
+.row {
+    width: 100%;
+}
+
 .rowItem {
     display: flex;
     flex-direction: row;
@@ -17,4 +21,52 @@
     margin: 0;
     padding: 0;
     color: #000;
+}
+
+.refreshButton {
+    display: inline-block;
+    cursor: pointer;
+    color: black;
+    border: none;
+    background-color: transparent;
+}
+
+.refreshButton img {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.refreshButton:hover {
+    background-color: #ccc;
+}
+
+.refreshButton:active {
+    background-color: #aaa;
+}
+
+.deleteButton {
+    display: inline-block;
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: red;
+}
+
+.deleteButton:hover {
+    color: #f00;
+}
+
+.deleteButton:active {
+    color: #c00;
+}
+
+.openRow {
+    display: inline;
+    color: green; 
+}
+
+.closedRow {
+    display: inline;
+    color: red;
 }

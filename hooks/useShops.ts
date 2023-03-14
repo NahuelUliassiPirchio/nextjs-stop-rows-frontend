@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
-import { Shop } from "types"
+import endpoints from "@common/endpoints"
+import { Shop } from "@common/types"
 
-const limit = 3
+const limit = 2
 
-export default function useGetShops(page: number, location: {lat: number, lng: number}){
-    const [hasMore,setHasMore] = useState(true)
+export default function useGetShops(page: number, location: {lat: number, lng: number}, all){
+    const [hasMore,setHasMore] = useState(false)
     const [error,setError] = useState('')
     const [loading,setLoading] = useState(true)
     const [data,setData] = useState<Array<Shop>>([])
@@ -16,7 +17,9 @@ export default function useGetShops(page: number, location: {lat: number, lng: n
         const controller = new AbortController()
         const {signal} = controller
 
-        fetch(`http://localhost:3001/shops?limit=${limit}&page=${page}`, {
+        const query = all ? `?limit=${limit}&page=${page}&status=open` : `?limit=${limit}&page=${page}&status=open&lat=${location.lat}&lng=${location.lng}`
+
+        fetch(endpoints.shops.getShops + query, {
             signal
         })
         .then(res=> {
@@ -25,8 +28,18 @@ export default function useGetShops(page: number, location: {lat: number, lng: n
         })
         .then(jsonData => {
             if (jsonData.data.length < limit) setHasMore(false)
+            else setHasMore(true)
             setData(prevData => {
-                return [...prevData, ...jsonData.data]
+                const uniqueProp = 'id'
+
+                const mergedData = [...prevData, ...jsonData.data].reduce((acc, current) => {
+                    if(!acc.some((item: Shop) => item[uniqueProp] === current[uniqueProp])) {
+                        acc.push(current)
+                    }
+                    return acc
+                }, [])
+
+                return mergedData;
             })
             setLoading(false)
         })
@@ -39,7 +52,7 @@ export default function useGetShops(page: number, location: {lat: number, lng: n
         return () => {
             controller.abort()
         }
-    },[page])
+    },[page, location])
 
     return {loading, error, hasMore, data}
 }

@@ -1,0 +1,61 @@
+.advertisement {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background-color: black;
+    border: 2px solid red;
+    border-radius: 4px;
+    padding: 1rem;
+    z-index: 1000;
+    margin: 1rem 0;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.advertisement::-webkit-scrollbar {
+    display: none;
+}
+
+.advertisement h2 {
+    color: red;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.advertisement p {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin: 0;
+    margin-top: 2rem;
+}
+
+.close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: white;
+    background-color: transparent;
+    border: 0;
+}
+
+.close:hover {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .advertisement p {
+        font-size: 1.2rem;
+        margin-top: 1rem;
+    }
+}

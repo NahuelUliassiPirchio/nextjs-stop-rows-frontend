@@ -1,11 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
 
-import { Shop } from '../types';
+import { Shop } from '@common/types';
 import useAuth from '@hooks/useAuth';
 import Menu from './Menu';
 import OwnedShopItem from './OwnedShopItem';
 import styles from '@styles/OwnersMain.module.css'
+import Head from 'next/head';
 
 export default function OwnersMain() {
     const { user, loading } = useAuth()
@@ -14,19 +15,24 @@ export default function OwnersMain() {
 
     const shops = user.shops
     return (
-        <div className={styles.container}>
-            <Menu name={user.name} />
-            <div className={styles.main}>
-                <ul className={styles.shops}>
-                    <h2 className={styles.title}>Your shops</h2>
-                    <Link href='/new-shop' className={styles.newShop}>+</Link>
-                    <ul>
-                        {shops.map((shop: Shop) => (
-                            <OwnedShopItem key={shop.id} shop={shop} />
-                        ))}
+        <>
+            <Head>
+                <title>Your Shops</title>
+            </Head>
+            <main className={styles.container}>
+                <Menu name={user.name} />
+                <div className={styles.main}>
+                    <ul className={styles.shops}>
+                        <h2 className={styles.title}>Your shops</h2>
+                        <Link href='/new-shop' className={styles.newShop}>+</Link>
+                        <ul>
+                            {shops.map((shop: Shop) => (
+                                <OwnedShopItem key={shop.id} shop={shop} />
+                            ))}
+                        </ul>
                     </ul>
-                </ul>
-            </div>
-        </div>
+                </div>
+            </main>
+        </>
     )
 }

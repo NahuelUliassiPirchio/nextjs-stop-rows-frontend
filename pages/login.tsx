@@ -3,6 +3,8 @@ import Link from "next/link"
 import { useRef, useState } from "react"
 import useAuth from "@hooks/useAuth"
 import styles from "@styles/Home.module.css"
+import Head from "next/head"
+import endpoints from "@common/endpoints"
 
 export default function Login() {
     const emailRef = useRef<HTMLInputElement >(null)
@@ -15,7 +17,7 @@ export default function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        await fetch("http://localhost:3001/auth/login", {
+        await fetch(endpoints.auth.login, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -55,15 +57,20 @@ export default function Login() {
     }
 
     return (
-        <div className={styles.container}>
-            <h1>Login</h1>
-            {error && <p className={styles.error}>{error}</p>}
-            <form className={styles.loginForm}>
-                <input type="email" placeholder="email" ref={emailRef} />
-                <input type="password" placeholder="*******" ref={passwordRef} />
-                <input className={styles.submit} type="submit" onClick={handleSubmit} value="Login"/>
-            </form>
-            <p>{"Don't have an account?"} <Link href="/signup">Sign Up</Link></p>
-        </div>
+        <>
+            <Head>
+                <title>Login</title>
+            </Head>
+            <main className={styles.container}>
+                <h1 className={styles.title}>Login</h1>
+                {error && <p className={styles.error}>{error}</p>}
+                <form className={styles.loginForm}>
+                    <input type="email" name="email" placeholder="email" ref={emailRef} />
+                    <input type="password" name="password" placeholder="*******" ref={passwordRef} />
+                    <input className={styles.submit} type="submit" onClick={handleSubmit} value="Login"/>
+                    <p>{"Don't have an account?"} <Link href="/signup">Sign Up</Link></p>
+                </form>
+            </main>
+        </>
     )
 }

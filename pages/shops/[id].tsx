@@ -1,21 +1,34 @@
-// get id from url, fetch shop data from api, pass shop data to ShopItem component
-
-import { Shop } from "../../types"
+import Head from "next/head"
+import endpoints from "@common/endpoints"
+import { Shop } from "@common/types"
 import ShopContainer from "@components/ShopContainer"
 
 export async function getServerSideProps(context) {
-    const res = await fetch(`http://localhost:3001/shops/${context.params.id}`)
-    const shop = await res.json()
+    let shop: Shop | null = null;
+    try {
+        const res = await fetch(endpoints.shops.get(context.params.id))
+        shop = await res.json()
+    } catch (error) {
+        console.log(error);
+    }
     
     return {
         props: {
          shop
         }
     }
-    }
+}
 
 export default function ShopPage({shop}: {shop: Shop}) {
+    if (!shop) {
+        return <div>Shop not found</div>
+    }
     return (
-        <ShopContainer shop={shop} />
+        <>
+            <Head>
+                <title>{shop.name}</title>
+            </Head>
+            <ShopContainer shop={shop} />
+        </>
     )
 }
