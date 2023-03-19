@@ -9,7 +9,7 @@ export async function getServerSideProps(context) {
         const res = await fetch(endpoints.shops.get(context.params.id))
         shop = await res.json()
     } catch (error) {
-        console.log(error);
+        console.log(error)
     }
     
     return {
@@ -21,7 +21,14 @@ export async function getServerSideProps(context) {
 
 export default function ShopPage({shop}: {shop: Shop}) {
     if (!shop) {
-        return <div>Shop not found</div>
+        return <h1 style={
+            {
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh'
+            }
+        }>Shop not found</h1>
     }
     return (
         <>

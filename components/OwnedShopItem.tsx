@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import Image from "next/image";
 
 import { Shop, Row } from "@common/types";
 import RowList from "./RowList";
@@ -78,7 +79,7 @@ export default function OwnedShopItem( {shop}:{shop:Shop}) {
     }
 
     return (
-        <>
+        <div className={styles.container}>
         {
             isFetching && <p>{action}ing...</p>
         }
@@ -87,10 +88,10 @@ export default function OwnedShopItem( {shop}:{shop:Shop}) {
         }
             <li className={styles.shopItem}>     
                 <div className={styles.leftContainer}>
-                    <p className={
+                    <h2 className={
                         row ? styles.active : styles.inactive
                     }
-                    >·</p>
+                    >·</h2>
                     <h3>{shop.name}</h3>
                     <p>{shop.address}</p>
                 </div>
@@ -112,7 +113,7 @@ export default function OwnedShopItem( {shop}:{shop:Shop}) {
                             <button className={styles.start} onClick={()=>handleClick('start')}>Start</button>
                         )
                     }
-                    <button className={styles.edit} onClick={()=>setEdit(true)}>Edit</button>
+                    <Image className={styles.edit} src="/images/edit.svg" alt="Edit Row" width={20} height={20} onClick={()=>setEdit(!edit)}/>
                     {
                         edit && <ShopForm shop={shop} setEdit={setEdit} />
                     }
@@ -124,6 +125,6 @@ export default function OwnedShopItem( {shop}:{shop:Shop}) {
                     shop.row && <RowList rowId={shop.row} owner={true}/>
                 }
             </div>
-        </>
+        </div>
     )
 }

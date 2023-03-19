@@ -3,6 +3,7 @@ import styles from "@styles/Home.module.css"
 import useAuth from "@hooks/useAuth"
 import Router from "next/router"
 import endpoints from "@common/endpoints"
+import Link from "next/link"
 
 export default function SignUpForm() {
     const [name, setName] = useState('')
@@ -21,20 +22,26 @@ export default function SignUpForm() {
         if (!(name && username && email && password && confirmPassword)) return setError('Please fill in all fields')
         if(password !== confirmPassword) return setError('Passwords do not match')
 
-        const res = await fetch(endpoints.auth.signup, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name,
-                username,
-                email,
-                password,
-                role
+        let res: Response | null = null
+        try {
+            res = await fetch(endpoints.auth.signup, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name,
+                    username,
+                    email,
+                    password,
+                    role
+                })
             })
-        })
-        const data = await res.json()
+        } catch (error) {
+            return setError('Server error')
+        }
+
+        const data = await res?.json()
         if (data.error) {
             setError(data.message)
         } else {
@@ -63,6 +70,7 @@ export default function SignUpForm() {
             </select>
             <p className={styles.error}>{error}</p>
             <input className={styles.submit} type="submit" value="Sign Up" onClick={handleSubmit} />
+            <p>Already have an account? <Link href='/login'>Log in</Link></p>
         </form>
     )
 }

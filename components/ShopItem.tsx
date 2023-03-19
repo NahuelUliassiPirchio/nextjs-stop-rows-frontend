@@ -1,12 +1,12 @@
 import Image from 'next/image';
 import React from 'react';
-import styles from '@styles/ShopItem.module.css'
-import { Shop } from '@common/types';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
-import useAuth from '@hooks/useAuth';
 import Router from 'next/router';
+
+import useAuth from '@hooks/useAuth';
 import endpoints from '@common/endpoints';
+import styles from '@styles/ShopItem.module.css'
 
 const ShopItem = ({shop, onItemClick}, ref) => {
 
@@ -26,7 +26,6 @@ const ShopItem = ({shop, onItemClick}, ref) => {
       },
     })
     if (!response.ok) {
-      console.log(response);
       alert('Something went wrong')
     }
     const data = await response.json()

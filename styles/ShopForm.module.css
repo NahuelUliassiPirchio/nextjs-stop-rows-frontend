@@ -4,8 +4,8 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 50%;
-  height: 50%;
   border-radius: 10px;
+  border: 1px solid #ccc;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -14,7 +14,23 @@
   grid-template-columns: 1fr 1fr;
   grid-gap: 1rem;
   padding: 20px;
-  background-color: black;
+  background-color: white;
+}
+
+.shopForm input {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  background-color: #fff;
+  color: black;
+  box-shadow: 0 0 5px #ccc;
+  text-align: center;
+}
+
+.updateCancel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .createForm {

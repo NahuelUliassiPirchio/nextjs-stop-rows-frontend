@@ -1,10 +1,11 @@
+import { useRef, useState } from "react"
 import Router from "next/router"
 import Link from "next/link"
-import { useRef, useState } from "react"
-import useAuth from "@hooks/useAuth"
-import styles from "@styles/Home.module.css"
 import Head from "next/head"
+
+import useAuth from "@hooks/useAuth"
 import endpoints from "@common/endpoints"
+import styles from "@styles/Home.module.css"
 
 export default function Login() {
     const emailRef = useRef<HTMLInputElement >(null)
@@ -17,6 +18,11 @@ export default function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        if (!emailRef.current?.value || !passwordRef.current?.value) {
+            setError("Please fill all fields")
+            return
+        }
+        
         await fetch(endpoints.auth.login, {
             method: "POST",
             headers: {
@@ -51,7 +57,12 @@ export default function Login() {
             }
         })
         .catch(err => {
-            setError(err.message)
+            if (err.message === "Failed to fetch") {
+                setError("Server error")
+            }
+            else {
+                setError(err.message)
+            }
         })
         Router.push("/login")
     }

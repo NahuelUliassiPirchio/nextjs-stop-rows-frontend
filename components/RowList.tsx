@@ -5,6 +5,7 @@ import useFetch from '@hooks/useFetch';
 import styles from '@styles/RowList.module.css'
 import Cookies from 'js-cookie';
 import Image from 'next/image';
+import Loading from './Loading';
 
 export default function RowList({rowId, displayIfNull, owner}: {rowId: string, displayIfNull?: boolean, owner?: boolean}){
 
@@ -35,14 +36,12 @@ export default function RowList({rowId, displayIfNull, owner}: {rowId: string, d
         })
       })
       .then(res => {
-          console.log(row?.shop.id);
           if (!res.ok) {
             throw new Error('Something went wrong')
           }
           return res.json()
         })
-        .then(data => {
-          console.log(data)
+        .then(_ => {
           fetchRows()
         })
         .catch(err => {
@@ -50,16 +49,18 @@ export default function RowList({rowId, displayIfNull, owner}: {rowId: string, d
         })
     }
 
+    if (loading) return <Loading/>
+    if (error) return <p>{error}</p>
     return (
         <div className={styles.row}>
-          {!displayIfNull && <h2>{row?.shop.name}</h2>}
+          {displayIfNull && <h2>{row?.shop?.name}</h2>}
           <button className={styles.refreshButton} onClick={() => fetchRows()}>
             <Image src="/refresh.svg" alt="refresh" width={20} height={20} />
-            refresh
+            Refresh
           </button>
-          <h3>Row Status: <p className={ row?.status === 'open' ? styles.openRow : styles.closedRow}>{row ? row.status : closed}</p></h3>
+          <h3>Row Status: <p className={ row?.status === 'open' ? styles.openRow : styles.closedRow}>{row ? row.status : 'closed'}</p></h3>
           {  
-          row?.customers.length ? (
+          row?.customers?.length ? (
             row.customers.map( (item, index) => (
               <div key={index} className={styles.rowItem}>
                 <p>{index + 1}°</p>

@@ -18,12 +18,11 @@ export default function useGetShops(page: number, location: {lat: number, lng: n
         const {signal} = controller
 
         const query = all ? `?limit=${limit}&page=${page}&status=open` : `?limit=${limit}&page=${page}&status=open&lat=${location.lat}&lng=${location.lng}`
-
         fetch(endpoints.shops.getShops + query, {
             signal
         })
         .then(res=> {
-            if (!res.ok) return setError(res.statusText)
+            if (!res.ok) throw Error(res.statusText)
             return res.json()
         })
         .then(jsonData => {
@@ -52,7 +51,7 @@ export default function useGetShops(page: number, location: {lat: number, lng: n
         return () => {
             controller.abort()
         }
-    },[page, location])
+    },[all, location.lat, location.lng, page])
 
     return {loading, error, hasMore, data}
 }

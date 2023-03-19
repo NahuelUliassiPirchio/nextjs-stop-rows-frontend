@@ -10,8 +10,6 @@ const useAuthGuard = (redirectPath: string, role?: string) => {
         if (!loading && !user) {
             Router.push(redirectPath)
         } else if (role && user && user.role !== role) {
-            console.log("hola",role, user);
-            
             Router.push(redirectPath)
         }
     }, [user, loading])

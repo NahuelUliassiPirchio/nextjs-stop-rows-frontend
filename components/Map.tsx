@@ -9,8 +9,7 @@ const containerStyle = {
   height: '100vh'
 };
 
-function Map({shops = [], onMarkerClick, center}: {shops: Shop[], onMarkerClick: (shop: Shop) => void, center: {lat: number, lng: number}}) {
-  const { isLoaded } = useJsApiLoader({
+function Map({shops = [], onMarkerClick,setIsLoaded, center}: {shops: Shop[], onMarkerClick: (shop: Shop) => void, setIsLoaded: (isLoaded: boolean) => void, center: {lat: number, lng: number}}) {const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: apiKey
   })
@@ -18,10 +17,11 @@ function Map({shops = [], onMarkerClick, center}: {shops: Shop[], onMarkerClick:
   const [map, setMap] = useState(null)
 
   const onLoad = useCallback(function callback(map: any) {
-    map.setZoom(14);
+    map.setZoom(14.5);
+    setIsLoaded(true)
 
     setMap(map)
-  }, [])
+  }, [setIsLoaded])
 
   const onUnmount = useCallback(function callback(map: any) {
     setMap(null)
@@ -50,11 +50,28 @@ function Map({shops = [], onMarkerClick, center}: {shops: Shop[], onMarkerClick:
             <Marker
               key={shop.id}
               position={{lat: shop.location.coordinates[1], lng: shop.location.coordinates[0]}}
-              label={shop.name}
+              icon={{
+                url: '/images/market.svg',
+                scaledSize: new window.google.maps.Size(40, 40),
+                origin: new window.google.maps.Point(0, 0),
+                anchor: new window.google.maps.Point(20, 20),
+                labelOrigin: new window.google.maps.Point(20, -5)
+              }}
+              title={shop.name + ' - ' + shop.address}
+              label={{
+                text: shop.name,
+                fontSize: '12px',
+                fontWeight: 'bold'
+              }}
+              options={{
+                animation: window.google.maps.Animation.DROP
+              }}
               onClick={() => {
                 onMarkerClick(shop)
               }}
-            />
+            >
+              <p>{shop.name}</p>
+            </Marker>
           )
         })
       }

@@ -1,9 +1,11 @@
+import Head from "next/head";
+import { useState } from "react";
+
 import useAuth from "@hooks/useAuth";
 import useAuthGuard from "@hooks/useAuthGuard";
-import { useState } from "react";
-import styles from "@styles/Profile.module.css";
-import Head from "next/head";
+import Loading from "@components/Loading";
 import endpoints from "@common/endpoints";
+import styles from "@styles/Profile.module.css";
 
 export default function Profile() {
     const { user, loading } = useAuth()
@@ -16,7 +18,7 @@ export default function Profile() {
         setAreDisabled(!areDisabled)
     }
 
-    const handleSave = async (e: React.SyntheticEvent) => {
+    const handleSave = async (e) => {
         const token = localStorage.getItem('token')
         await fetch(endpoints.profile, {
             method: 'PUT',
@@ -39,12 +41,10 @@ export default function Profile() {
         </Head>
         {
         loading ? (
-            <div className={styles.loading}>
-                    <h1>Loading...</h1>
-                </div>
+            <Loading/>
             ) : (
                     user && (
-                        <div className={styles.profile}>
+                        <div className={styles.container}>
                             <h1>Profile</h1>
                             <form className={styles.profileForm}>
                                 <label htmlFor="name">Name</label>
@@ -56,7 +56,7 @@ export default function Profile() {
                                 <label htmlFor="password">Password</label>
                                 <input type="password" name="password" id="password" defaultValue="********" disabled={areDisabled} />
                                 <input type="submit" value="Change" onClick={handleUpdate} hidden={!areDisabled}/>
-                                <input type="submit" value="Save" disabled={areDisabled} />
+                                <input type="submit" value="Save" onClick={handleSave} disabled={areDisabled} />
                             </form>
                         </div>
                     )

@@ -37,7 +37,7 @@ const useAuth = () => {
                     logout()
                 }
             })
-            .catch(err => {
+            .catch( _ => {
                 logout()
             }
         )

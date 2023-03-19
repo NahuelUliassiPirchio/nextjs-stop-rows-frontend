@@ -1,17 +1,18 @@
 import React from 'react';
 import Link from 'next/link';
+import Head from 'next/head';
 
 import { Shop } from '@common/types';
 import useAuth from '@hooks/useAuth';
 import Menu from './Menu';
 import OwnedShopItem from './OwnedShopItem';
+import Loading from './Loading';
 import styles from '@styles/OwnersMain.module.css'
-import Head from 'next/head';
 
 export default function OwnersMain() {
     const { user, loading } = useAuth()
 
-    if (loading) return <div>Loading...</div>
+    if (loading) return <Loading/>
 
     const shops = user.shops
     return (

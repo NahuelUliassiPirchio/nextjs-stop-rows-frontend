@@ -23,8 +23,10 @@ export default function CustomersMain() {
   const [selectedShop, setSelectedShop] = React.useState<Shop | null>(null)
   const [selectedMarker, setSelectedMarker] = React.useState<Shop | null>(null)
 
-  const [center, setCenter] = React.useState({lat: -34.609607, lng: -58.388660})
-  const [location, setLocation] = React.useState({lat: -34.609607, lng: -58.388660})
+  const initialLocation = {lat: -34.609607, lng: -58.388660}
+  const [isLoaded, setIsLoaded] = React.useState(false)
+  const [center, setCenter] = React.useState(initialLocation)
+  const [location, setLocation] = React.useState(initialLocation)
   
   const allParam = Router.query.all
   const [page, setPage] = React.useState(1)
@@ -60,24 +62,29 @@ export default function CustomersMain() {
   }
 
   React.useEffect(() => {
-    window.navigator.geolocation.watchPosition((position) => {
-        setCenter({lat: position.coords.latitude, lng: position.coords.longitude})
-        setLocation({lat: position.coords.latitude, lng: position.coords.longitude})
-    })
-  }, [])
+    if(isLoaded){
+      window.navigator.geolocation.getCurrentPosition((position) => {
+          setCenter({lat: position.coords.latitude, lng: position.coords.longitude})
+          setLocation({lat: position.coords.latitude, lng: position.coords.longitude})
+      },
+      (error) => {
+        console.log(error)
+      },
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
+    }
+  }, [isLoaded])
 
   const observer = React.useRef<IntersectionObserver>()
-  const lastShopElementRef = React.useCallback(node => {
+  const lastShopElementRef = React.useCallback((node: Element) => {
     if (shopsLoading) return
     if (observer.current) observer.current.disconnect()
-    observer.current = new IntersectionObserver(entries => {
-      
-      
+
+    observer.current = new IntersectionObserver(entries => {      
       if (entries[0].isIntersecting && hasMore && !shopsLoading) {
-        console.log(entries);
         setPage(prevPage => prevPage + 1)
       }
     }, {threshold: 1})
+    
     if(node) observer.current.observe(node)
   }, [hasMore, shopsLoading])
 
@@ -107,26 +114,27 @@ export default function CustomersMain() {
       </Head>
       <div className={styles.container}>
         <aside className={styles.aside}>
-          <>
-            <h1>Shops</h1>
-            {
-              shops && shops.map( (shop:any, index: number) => {
-                return <ShopItem key={shop.id} shop={shop} ref={
-                  (index === shops.length - 1) ? lastShopElementRef : null} onItemClick={handleShopClick} />
-              })
-            }
-            {hasMore && <Loading />}
-            {(!hasMore && shops.length===0) && (
-              <>
-                <h2 className={styles.message}>No stores found in your area</h2>
-                <u><Link className={styles.message} href="/?all=true"> Find all stores </Link></u>
-              </>
-            )}
-          </>
+          <h1>Shops</h1>
+          {
+            error && <h2 className={styles.message}>Error loading shops</h2>
+          }
+          {
+            shops && shops.map( (shop:any, index: number) => 
+              <ShopItem key={shop.id} shop={shop} ref={
+                (index === shops.length - 1) ? lastShopElementRef : null} onItemClick={handleShopClick} />
+            )
+          }
+          {hasMore && <Loading />}
+          {(!hasMore && shops.length===0 && !error) && (
+            <>
+              <h2 className={styles.message}>No stores found in your area</h2>
+              <u><Link className={styles.message} href="/?all=true"> Find all stores </Link></u>
+            </>
+          )}
         </aside>
         <main>
           {
-            loading ? <div>Loading...</div> : (
+            loading ? <Loading/> : (
                 user ? (
                   <Menu name={user.name}/>
                 ) : (
@@ -134,9 +142,9 @@ export default function CustomersMain() {
                 )
             )
           }
-          <Map shops={shops} onMarkerClick={handleMarkerClick} center={center}/>
+          <Map shops={shops} onMarkerClick={handleMarkerClick} center={center} setIsLoaded={setIsLoaded}/>
           {
-            loading ? <div>Loading...</div> : (
+            loading ? <Loading/> : (
               user?.row && (
                 <div className={styles.activeRowList}>
                   <RowList rowId={user.row} displayIfNull={false} />
