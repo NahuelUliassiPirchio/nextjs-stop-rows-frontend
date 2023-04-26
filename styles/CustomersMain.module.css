@@ -9,7 +9,7 @@
 .aside {
   grid-area: aside;
   height: 100%;
-  background-color: #f5f5f5;
+  background-color: var(--components-background);
   border-right: 1px solid #e5e5e5;
   overflow-y: scroll;
 }
@@ -100,10 +100,18 @@
 
   .toggleBottomSheetButton {
     display: block;
+    position: fixed;
     width: 100%;
-    background-color: transparent;
+    height: fit-content;
+    background-color: var(--components-background);
     border: none;
     z-index: 20;
+  }
+
+  .toggleBottomSheetButton img {
+    width: 2rem;
+    height: 2rem;
+    transform: rotate(0deg);
     transition: transform 0.5s ease-in-out;
   }
   
@@ -122,7 +130,13 @@
     height: 80%;
   }
 
-  .aside.open .toggleBottomSheetButton {
+  .aside.open .toggleBottomSheetButton img {
     transform: rotate(180deg);
+  }
+
+  .aside h1 {
+    padding: 0;
+    margin: 2rem 0 0 0;
+    text-align: center;
   }
 }
