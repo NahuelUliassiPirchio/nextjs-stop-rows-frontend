@@ -1,11 +1,11 @@
+.title {
+    display: inline-block;
+    margin: 1rem 1rem 0 1rem;
+}
+
 .shops {
     min-width: 3rem;
     margin: auto 1rem;
-}
-
-.title {
-    display: inline-block;
-    margin-right: 1rem;
 }
 
 .newShop {

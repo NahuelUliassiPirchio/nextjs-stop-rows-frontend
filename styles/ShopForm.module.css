@@ -37,3 +37,13 @@
   width: 100%;
   height: 100%;
 }
+
+@media (max-width: 768px) {
+  .editForm {
+    width: 80%;
+  }
+  .shopForm {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}

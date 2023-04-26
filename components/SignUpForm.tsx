@@ -54,15 +54,15 @@ export default function SignUpForm() {
     return (
         <form>
             <label htmlFor="name">Name</label>
-            <input type="text" name="name" id="name" onChange={e => setName(e.target.value)} />
+            <input type="text" name="name" id="name" onChange={e => setName(e.target.value)} required/>
             <label htmlFor="username">Username</label>
-            <input type="text" name="username" id="username" onChange={e => setUsername(e.target.value)} />
+            <input type="text" name="username" id="username" onChange={e => setUsername(e.target.value)} required/>
             <label htmlFor="email">Email</label>
-            <input type="email" name="email" id="email" onChange={e => setEmail(e.target.value)} />
+            <input type="email" name="email" id="email" onChange={e => setEmail(e.target.value)} required/>
             <label htmlFor="password">Password</label>
-            <input type="password" name="password" id="password" onChange={e => setPassword(e.target.value)} />
+            <input type="password" name="password" id="password" onChange={e => setPassword(e.target.value)} required/>
             <label htmlFor="confirmPassword">Confirm password</label>
-            <input type="password" name="confirmPassword" id="confirmPassword" onChange={e => setConfirmPassword(e.target.value)} />
+            <input type="password" name="confirmPassword" id="confirmPassword" onChange={e => setConfirmPassword(e.target.value)} required/>
             <label htmlFor="role">Role</label>
             <select name="role" id="role" onChange={e => setRole(e.target.value)}>
                 <option value="customer">Customer</option>

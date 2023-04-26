@@ -51,7 +51,7 @@ function Map({shops = [], onMarkerClick,setIsLoaded, center}: {shops: Shop[], on
               key={shop.id}
               position={{lat: shop.location.coordinates[1], lng: shop.location.coordinates[0]}}
               icon={{
-                url: '/images/market.svg',
+                url: '/icons/market.svg',
                 scaledSize: new window.google.maps.Size(40, 40),
                 origin: new window.google.maps.Point(0, 0),
                 anchor: new window.google.maps.Point(20, 20),

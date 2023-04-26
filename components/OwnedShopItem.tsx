@@ -89,7 +89,7 @@ export default function OwnedShopItem( {shop}:{shop:Shop}) {
             <li className={styles.shopItem}>     
                 <div className={styles.leftContainer}>
                     <h2 className={
-                        row ? styles.active : styles.inactive
+                        `${styles.status} ${row ? styles.active : styles.inactive}`
                     }
                     >·</h2>
                     <h3>{shop.name}</h3>
@@ -113,7 +113,7 @@ export default function OwnedShopItem( {shop}:{shop:Shop}) {
                             <button className={styles.start} onClick={()=>handleClick('start')}>Start</button>
                         )
                     }
-                    <Image className={styles.edit} src="/images/edit.svg" alt="Edit Row" width={20} height={20} onClick={()=>setEdit(!edit)}/>
+                    <Image className={styles.edit} src="/icons/edit.svg" alt="Edit Row" width={20} height={20} onClick={()=>setEdit(!edit)}/>
                     {
                         edit && <ShopForm shop={shop} setEdit={setEdit} />
                     }

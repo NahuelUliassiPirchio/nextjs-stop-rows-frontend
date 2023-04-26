@@ -76,8 +76,8 @@ export default function Login() {
                 <h1 className={styles.title}>Login</h1>
                 {error && <p className={styles.error}>{error}</p>}
                 <form className={styles.loginForm}>
-                    <input type="email" name="email" placeholder="email" ref={emailRef} />
-                    <input type="password" name="password" placeholder="*******" ref={passwordRef} />
+                    <input type="email" name="email" placeholder="email" ref={emailRef} required/>
+                    <input type="password" name="password" placeholder="*******" ref={passwordRef} required/>
                     <input className={styles.submit} type="submit" onClick={handleSubmit} value="Login"/>
                     <p>{"Don't have an account?"} <Link href="/signup">Sign Up</Link></p>
                 </form>

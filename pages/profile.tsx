@@ -48,13 +48,13 @@ export default function Profile() {
                             <h1>Profile</h1>
                             <form className={styles.profileForm}>
                                 <label htmlFor="name">Name</label>
-                                <input type="text" name="name" id="name" defaultValue={user.name} disabled={areDisabled} />
+                                <input type="text" name="name" id="name" defaultValue={user.name} disabled={areDisabled} required/>
                                 <label htmlFor="username">Username</label>
-                                <input type="text" name="username" id="username" defaultValue={user.username} disabled={areDisabled} />
+                                <input type="text" name="username" id="username" defaultValue={user.username} disabled={areDisabled} required/>
                                 <label htmlFor="email">Email</label>
-                                <input type="email" name="email" id="email" defaultValue={user.email} disabled={areDisabled} />
+                                <input type="email" name="email" id="email" defaultValue={user.email} disabled={areDisabled} required/>
                                 <label htmlFor="password">Password</label>
-                                <input type="password" name="password" id="password" defaultValue="********" disabled={areDisabled} />
+                                <input type="password" name="password" id="password" defaultValue="********" disabled={areDisabled} required/>
                                 <input type="submit" value="Change" onClick={handleUpdate} hidden={!areDisabled}/>
                                 <input type="submit" value="Save" onClick={handleSave} disabled={areDisabled} />
                             </form>

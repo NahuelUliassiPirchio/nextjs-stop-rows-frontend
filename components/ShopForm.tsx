@@ -23,9 +23,7 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
     const handleSubmit = (e) => {
         e.preventDefault()
         if (loading) return
-        if (!lat || !lng || !name || !description || !phone || !website || !logo || !address || !email ) return setError('Please fill in all fields')
-        console.log(address);
-        
+
         setLoading(true)
         let shopURL = endpoints.shops.getShops
         let method = 'POST'
@@ -33,7 +31,6 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
             method = 'PUT'
             shopURL += `/${shop.id}`
         }
-        console.log(shopURL);
 
         fetch(shopURL, {
             method,
@@ -75,6 +72,7 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required
             />
             <label htmlFor="email">Email</label>
             <input
@@ -82,6 +80,7 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
             />
 
             <label htmlFor="description">Description</label>
@@ -90,6 +89,7 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                required
             />
             <label htmlFor="address">Address</label>
             <input
@@ -97,6 +97,7 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
                 id="location"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
+                required
             />
 
             <label htmlFor="lat">Latitude</label>
@@ -105,6 +106,7 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
                 id="lat"
                 value={lat}
                 onChange={(e) => setLat(e.target.value)}
+                required
             />
             <label htmlFor="lng">Longitude</label>
             <input
@@ -112,6 +114,7 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
                 id="lng"
                 value={lng}
                 onChange={(e) => setLng(e.target.value)}
+                required
             />
             
             <label htmlFor="phone">Phone</label>
@@ -120,6 +123,7 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
                 id="phone"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                required
             />
             <label htmlFor="website">Website</label>
             <input
@@ -127,6 +131,7 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
                 id="website"
                 value={website}
                 onChange={(e) => setWebsite(e.target.value)}
+                required
             />
             <label htmlFor="logo">Logo</label>
             <input
@@ -134,6 +139,7 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
                 id="logo"
                 value={logo}
                 onChange={(e) => setLogo(e.target.value)}
+                required
             />
             {
                 shop ? (

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React from 'react';
+import React, { LegacyRef } from 'react';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 import Router from 'next/router';

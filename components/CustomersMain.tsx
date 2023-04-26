@@ -1,35 +1,38 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 import Router from 'next/router';
 import Head from 'next/head';
+import Image from 'next/image';
+import Map from './Map'
 
 import { Shop } from '@common/types';
 import ShopItem from './ShopItem';
 
 import useAuth from '@hooks/useAuth';
-import Map from './Map'
 import Menu from './Menu';
-import RowList from './RowList';
 import useGetShops from '@hooks/useShops';
+import RowList from './RowList';
 import Loading from './Loading';
 import endpoints from '@common/endpoints';
-import styles from '@styles/CustomersMain.module.css'
 import Advertisement from './Advertisement';
+import styles from '@styles/CustomersMain.module.css'
 
 export default function CustomersMain() {
   const { user, loading } = useAuth()
 
-  const [selectedShop, setSelectedShop] = React.useState<Shop | null>(null)
-  const [selectedMarker, setSelectedMarker] = React.useState<Shop | null>(null)
+  const [selectedShop, setSelectedShop] = useState<Shop | null>(null)
+  const [selectedMarker, setSelectedMarker] = useState<Shop | null>(null)
 
   const initialLocation = {lat: -34.609607, lng: -58.388660}
-  const [isLoaded, setIsLoaded] = React.useState(false)
-  const [center, setCenter] = React.useState(initialLocation)
-  const [location, setLocation] = React.useState(initialLocation)
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [center, setCenter] = useState(initialLocation)
+  const [location, setLocation] = useState(initialLocation)
+
+  const [bottomSheetOpen, setBottomSheetOpen] = useState(false)
   
   const allParam = Router.query.all
-  const [page, setPage] = React.useState(1)
+  const [page, setPage] = useState(1)
   const {loading: shopsLoading, error, data: shops, hasMore} = useGetShops(page, location, allParam)
 
   useEffect(() => {
@@ -61,7 +64,7 @@ export default function CustomersMain() {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if(isLoaded){
       window.navigator.geolocation.getCurrentPosition((position) => {
           setCenter({lat: position.coords.latitude, lng: position.coords.longitude})
@@ -74,8 +77,8 @@ export default function CustomersMain() {
     }
   }, [isLoaded])
 
-  const observer = React.useRef<IntersectionObserver>()
-  const lastShopElementRef = React.useCallback((node: Element) => {
+  const observer = useRef<IntersectionObserver>()
+  const lastShopElementRef = useCallback((node: Element) => {
     if (shopsLoading) return
     if (observer.current) observer.current.disconnect()
 
@@ -113,7 +116,10 @@ export default function CustomersMain() {
         <title>Stop Rows</title>
       </Head>
       <div className={styles.container}>
-        <aside className={styles.aside}>
+        <aside className={`${styles.aside} ${bottomSheetOpen && styles.open}`}>
+          <button className={styles.toggleBottomSheetButton} onClick={() => setBottomSheetOpen(!bottomSheetOpen)}>
+            <Image src="/icons/collapse-arrow.svg" alt={`${bottomSheetOpen ? 'Open' : 'Close'} bottom sheet`} width={30} height={30} />
+          </button>
           <h1>Shops</h1>
           {
             error && <h2 className={styles.message}>Error loading shops</h2>
@@ -132,7 +138,7 @@ export default function CustomersMain() {
             </>
           )}
         </aside>
-        <main>
+        <main className={styles.main}>
           {
             loading ? <Loading/> : (
                 user ? (
@@ -142,7 +148,9 @@ export default function CustomersMain() {
                 )
             )
           }
-          <Map shops={shops} onMarkerClick={handleMarkerClick} center={center} setIsLoaded={setIsLoaded}/>
+          <div className={styles.mapContainer}>
+            <Map shops={shops} onMarkerClick={handleMarkerClick} center={center} setIsLoaded={setIsLoaded}/>
+          </div>
           {
             loading ? <Loading/> : (
               user?.row && (

@@ -24,7 +24,7 @@ export default function OwnersMain() {
                 <Menu name={user.name} />
                 <div className={styles.main}>
                     <ul className={styles.shops}>
-                        <h2 className={styles.title}>Your shops</h2>
+                        <h1 className={styles.title}>Your shops</h1>
                         <Link href='/new-shop' className={styles.newShop}>+</Link>
                         <ul>
                             {shops.map((shop: Shop) => (
