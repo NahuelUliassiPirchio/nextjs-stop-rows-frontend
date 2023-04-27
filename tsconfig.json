@@ -28,6 +28,6 @@
       "@common/*": ["common/*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/LoadingSkeletons/ShopItem.LoadingSkeletontsx"],
   "exclude": ["node_modules"]
 }

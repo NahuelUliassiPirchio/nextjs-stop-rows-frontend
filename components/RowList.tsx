@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import Image from 'next/image';
+
 import { Row } from '@common/types';
 import endpoints from '@common/endpoints';
 import useFetch from '@hooks/useFetch';
 import styles from '@styles/RowList.module.css'
-import Cookies from 'js-cookie';
-import Image from 'next/image';
-import Loading from './Loading';
+import RowListLoadingSkeleton from './LoadingSkeletons/RowListLoadingSkeleton';
 
 export default function RowList({rowId, displayIfNull, owner}: {rowId: string, displayIfNull?: boolean, owner?: boolean}){
 
@@ -49,7 +50,15 @@ export default function RowList({rowId, displayIfNull, owner}: {rowId: string, d
         })
     }
 
-    if (loading) return <Loading/>
+    if (loading) return (
+      <div className={styles.row}>
+        {
+          ...Array(3).fill(0).map((_, index) => (
+            <RowListLoadingSkeleton key={index} owner={owner} />
+          ))
+        }
+      </div>
+      )
     if (error) return <p>{error}</p>
     return (
         <div className={styles.row}>

@@ -17,6 +17,7 @@ import Loading from './Loading';
 import endpoints from '@common/endpoints';
 import Advertisement from './Advertisement';
 import styles from '@styles/CustomersMain.module.css'
+import ShopItemLoadingSkeleton from './LoadingSkeletons/ShopItem.LoadingSkeleton';
 
 export default function CustomersMain() {
   const { user, loading } = useAuth()
@@ -130,7 +131,7 @@ export default function CustomersMain() {
                 (index === shops.length - 1) ? lastShopElementRef : null} onItemClick={handleShopClick} />
             )
           }
-          {hasMore && <Loading />}
+          {hasMore && <ShopItemLoadingSkeleton/>}
           {(!hasMore && shops.length===0 && !error) && (
             <>
               <h2 className={styles.message}>No stores found in your area</h2>
