@@ -16,8 +16,9 @@ import RowList from './RowList';
 import Loading from './Loading';
 import endpoints from '@common/endpoints';
 import Advertisement from './Advertisement';
-import styles from '@styles/CustomersMain.module.css'
 import ShopItemLoadingSkeleton from './LoadingSkeletons/ShopItem.LoadingSkeleton';
+import ShopContainer from './ShopContainer';
+import styles from '@styles/CustomersMain.module.css'
 
 export default function CustomersMain() {
   const { user, loading } = useAuth()
@@ -63,6 +64,10 @@ export default function CustomersMain() {
     if (shopItem) {
       shopItem.scrollIntoView({behavior: 'smooth'})
     }
+  }
+
+  const handleSideBar = () => {
+    
   }
 
   useEffect(() => {
@@ -121,24 +126,51 @@ export default function CustomersMain() {
           <button className={styles.toggleBottomSheetButton} onClick={() => setBottomSheetOpen(!bottomSheetOpen)}>
             <Image src="/icons/collapse-arrow.svg" alt={`${bottomSheetOpen ? 'Open' : 'Close'} bottom sheet`} width={30} height={30} />
           </button>
-          <h1>Shops</h1>
+          <section className={`${styles.shopsContainer} ${selectedShop && styles.hide}`}>
+            <h1>Shops</h1>
+            {
+              error && <h2 className={styles.message}>Error loading shops</h2>
+            }
+            {
+              shops && shops.map( (shop:any, index: number) => 
+                <ShopItem key={shop.id} shop={shop} ref={
+                  (index === shops.length - 1) ? lastShopElementRef : null} onItemClick={handleShopClick} />
+              )
+            }
+            {hasMore && <ShopItemLoadingSkeleton/>}
+            {(!hasMore && shops.length===0 && !error) && (
+              <>
+                <h2 className={styles.message}>No stores found in your area</h2>
+                <u><Link className={styles.message} href="/?all=true"> Find all stores </Link></u>
+              </>
+            )}
+          </section>
+
           {
-            error && <h2 className={styles.message}>Error loading shops</h2>
-          }
-          {
-            shops && shops.map( (shop:any, index: number) => 
-              <ShopItem key={shop.id} shop={shop} ref={
-                (index === shops.length - 1) ? lastShopElementRef : null} onItemClick={handleShopClick} />
+            selectedShop && (
+              <div className={styles.shopContainer}>
+                <button
+                  className={styles.backButton}
+                  onClick={()=>{
+                  const shopId = selectedShop.id
+                  setSelectedShop(null)
+                  setTimeout(()=>{
+                    const shopItem = document.getElementById(`shop-${shopId}`)
+                    if (shopItem) {
+                      shopItem.scrollIntoView()
+                    }
+                  },300)
+                }}>
+                  <Image src='/icons/back-arrow.svg' width={40} height={40} alt='go back'/>
+                </button>
+                <ShopContainer shop={selectedShop} />
+              </div>
             )
           }
-          {hasMore && <ShopItemLoadingSkeleton/>}
-          {(!hasMore && shops.length===0 && !error) && (
-            <>
-              <h2 className={styles.message}>No stores found in your area</h2>
-              <u><Link className={styles.message} href="/?all=true"> Find all stores </Link></u>
-            </>
-          )}
         </aside>
+
+
+
         <main className={styles.main}>
           {
             loading ? <Loading/> : (

@@ -8,15 +8,17 @@ export default function ShopContainer({shop}: {shop: Shop}) {
   return (
     <section className={styles.container}>
       <div className={styles.shop}>
-        <Image className={styles.shopImage} src={shop.logo} alt={shop.name} width={150} height={150} />
+        <Image className={styles.shopImage} src={shop.logo} alt={shop.name} width={200} height={200} />
         <div className={styles.shopInfo}>
-          <h2>Shop Info:</h2>
           <h1>{shop.name}</h1>
-          <p>{shop.address}</p>
-          <p>{shop.description}</p>
-          <p>{shop.email}</p>
-          <p>{shop.phone}</p>
-          <p>{shop.website}</p>
+          <p className={styles.description}>{shop.description}</p>
+
+          <ul>
+            <li><Image src='/icons/location-pin.svg'width={20} height={20} alt='location'/><p>{shop.address}</p></li>
+            <li><Image src='/icons/email.svg'width={20} height={20} alt='email'/><p>{shop.email}</p></li>
+            <li><Image src='/icons/phone.svg'width={20} height={20} alt='phone'/><p>{shop.phone}</p></li>
+            <li><Image src='/icons/www.svg'width={20} height={20} alt='website'/><p>{shop.website}</p></li>
+          </ul>
         </div>
       </div>
       <div className={styles.shopRow}>

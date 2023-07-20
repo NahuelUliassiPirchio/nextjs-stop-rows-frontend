@@ -9,7 +9,6 @@ import styles from '@styles/RowList.module.css'
 import RowListLoadingSkeleton from './LoadingSkeletons/RowListLoadingSkeleton';
 
 export default function RowList({rowId, displayIfNull, owner}: {rowId: string, displayIfNull?: boolean, owner?: boolean}){
-
     const [row, setRow] = useState<Row>();
     const {data, error, loading, fetcher: fetchRows} = useFetch(endpoints.rows.get(rowId))
 

@@ -9,11 +9,13 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   margin: 1rem;
   background: #fff;
+  cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
 
 .shopContainer:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
+  background-color: lightgrey;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
 }
 
@@ -67,4 +69,15 @@
   margin: 0.5rem;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+}
+
+.buttonContainer button:hover {
+  background-color: gray;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .shopContainer {
+    flex-direction: row;
+  }
 }

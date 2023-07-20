@@ -23,6 +23,19 @@
   color: black;
 }
 
+.hide {
+  display: none;
+}
+
+.aside .shopContainer button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.aside .shopContainer button:hover {
+  scale: 1.1;
+}
+
 .toggleBottomSheetButton {
   display: none;
 }
@@ -84,6 +97,12 @@
   cursor: pointer;
 }
 
+@media (max-width: 950px) {
+  .container{
+    grid-template-columns: 2fr 3fr;
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     display: flex;
@@ -113,6 +132,11 @@
     height: 2rem;
     transform: rotate(0deg);
     transition: transform 0.5s ease-in-out;
+  }
+
+  .backButton {
+    position: absolute;
+    top: 3rem;
   }
   
   .aside {
