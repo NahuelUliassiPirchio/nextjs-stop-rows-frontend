@@ -4,8 +4,8 @@ import { useState } from "react";
 import useAuth from "@hooks/useAuth";
 import useAuthGuard from "@hooks/useAuthGuard";
 import Loading from "@components/Loading";
-import endpoints from "@common/endpoints";
 import styles from "@styles/Profile.module.css";
+import { uploadProfile } from "@services/auth";
 
 export default function Profile() {
     const { user, loading } = useAuth()
@@ -19,19 +19,12 @@ export default function Profile() {
     }
 
     const handleSave = async (e) => {
-        const token = localStorage.getItem('token')
-        await fetch(endpoints.profile, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                name: e.target.name.value,
-                username: e.target.username.value,
-                email: e.target.email.value,
-            })
+        await uploadProfile({
+            name: e.target.name.value,
+            username: e.target.username.value,
+            email: e.target.email.value,
         })
+        .catch(err=> alert(err.message))
     }
     
     return (

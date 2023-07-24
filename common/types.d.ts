@@ -1,5 +1,3 @@
-import { type } from "os";
-
 type Shop = {
   id: string;
   name: string;
@@ -14,6 +12,18 @@ type Shop = {
     coordinates: number[];
   }
   row: string;
+}
+
+type NewShop = {
+  id?: string
+  email: string
+  name: string
+  description: string
+  coords: [lat: number, lng: number]
+  phone: string
+  website: string
+  address: string
+  logo: string
 }
 
 type Row = {
@@ -31,9 +41,11 @@ type User = {
   id: string;
 }
 
+type Role = 'customer'|'owner'
+
 type Customer = {
   date: Date;
   user: User;
 }
 
-export { Shop, Row }
+export { Shop, NewShop, Row, Role }

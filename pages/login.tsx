@@ -4,7 +4,7 @@ import Link from "next/link"
 import Head from "next/head"
 
 import useAuth from "@hooks/useAuth"
-import endpoints from "@common/endpoints"
+import {login as loginService} from '@services/auth'
 import styles from "@styles/Home.module.css"
 
 export default function Login() {
@@ -22,30 +22,10 @@ export default function Login() {
             setError("Please fill all fields")
             return
         }
-        
-        await fetch(endpoints.auth.login, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(
-                {
-                    email: emailRef.current?.value,
-                    password: passwordRef.current?.value
-                }
-            )
+        loginService({
+            email: emailRef.current?.value,
+            password: passwordRef.current?.value
         })
-        .then(res => {
-            if (res.status === 401) {
-                throw new Error("Invalid credentials")
-            }
-            else if (res.status === 500) {
-                throw new Error("Server error")
-            }
-            else if (res.status === 400) {
-                throw new Error("Bad request")
-            }
-            return res.json()})
         .then(data => {
             if (data.error) {
                 alert(data.error)

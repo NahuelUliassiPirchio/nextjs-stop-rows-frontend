@@ -1,13 +1,12 @@
 import Head from "next/head"
-import endpoints from "@common/endpoints"
 import { Shop } from "@common/types"
 import ShopContainer from "@components/ShopContainer"
+import { getShop } from "services/shops";
 
 export async function getServerSideProps(context) {
     let shop: Shop | null = null;
     try {
-        const res = await fetch(endpoints.shops.get(context.params.id))
-        shop = await res.json()
+        shop = await getShop(context.params.id)
     } catch (error) {
         console.log(error)
     }

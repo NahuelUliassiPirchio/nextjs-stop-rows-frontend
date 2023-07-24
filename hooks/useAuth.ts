@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Cookie from "js-cookie";
-import endpoints from "@common/endpoints";
+import { getProfile, refreshToken as refreshAccessToken } from "@services/auth";
 
 const useAuth = () => {
     const [user, setUser] = useState<any>(null);
@@ -21,14 +21,8 @@ const useAuth = () => {
                 logout()
                 return
             }
-            fetch(endpoints.auth.refresh, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${refreshToken}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(res => res.json())
+            
+            refreshAccessToken()
             .then(data => {
                 if (data.accessToken) {
                     Cookie.set("accessToken", data.accessToken)
@@ -43,26 +37,18 @@ const useAuth = () => {
         )
         }
 
-        fetch(endpoints.profile, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        })  
-            .then(res => {
-                if (!res.ok) throw new Error("Not authorized")
-                return res.json()
-            })
-            .then(data => {
-                setUser(data)
-            })
-            .catch(err => {
-                if (err.message === "Not authorized") {
-                    logout()
-                }                
-            })
-            .finally(() => {
-                setLoading(false)
-            }
+        getProfile()
+        .then(data => {
+            setUser(data)
+        })
+        .catch(err => {
+            if (err.message === "Not authorized") {
+                logout()
+            }                
+        })
+        .finally(() => {
+            setLoading(false)
+        }
         )
     }, []);
 
@@ -75,18 +61,13 @@ const useAuth = () => {
         Cookie.set("accessToken", accessToken)
         Cookie.set("expirationDate", expirationDate.toString())
 
-        fetch(endpoints.profile, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
+        getProfile()
+        .then(data => {
+            setUser(data)
         })
-            .then(res => res.json())
-            .then(data => {
-                setUser(data)
-            })
-            .finally(() => {
-                setLoading(false)
-            }
+        .finally(() => {
+            setLoading(false)
+        }
         )
     }
 

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import Cookies from 'js-cookie';
 import Router from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -14,11 +13,11 @@ import Menu from './Menu';
 import useGetShops from '@hooks/useShops';
 import RowList from './RowList';
 import Loading from './Loading';
-import endpoints from '@common/endpoints';
 import Advertisement from './Advertisement';
 import ShopItemLoadingSkeleton from './LoadingSkeletons/ShopItem.LoadingSkeleton';
 import ShopContainer from './ShopContainer';
 import styles from '@styles/CustomersMain.module.css'
+import { leaveRow } from '@services/rows';
 
 export default function CustomersMain() {
   const { user, loading } = useAuth()
@@ -97,22 +96,16 @@ export default function CustomersMain() {
     if(node) observer.current.observe(node)
   }, [hasMore, shopsLoading])
 
-  const token = Cookies.get('accessToken')
 
   const leaveHandler = async () => {
-    const response = await fetch(endpoints.rows.leave(user?.row), {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
+    leaveRow(user?.row)
+    .then(() => {
+      alert('You have left the row')
+      Router.reload()
     })
-    const data = await response.json()
-    if (data.error) {
-      return alert(data.error)
-    }
-    alert('You have left the row')
-    Router.reload()
+    .catch(error=>{
+      alert(error.message)
+    })
   }
 
   return (

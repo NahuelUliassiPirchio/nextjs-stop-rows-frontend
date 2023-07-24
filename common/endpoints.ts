@@ -24,7 +24,7 @@ const endpoints = {
         get: (shopId: string) :string => `${URL}/shops/${shopId}`,
         getShops: `${URL}/shops`,
         applyAction: (shopId: string, action: string | null) :string => `${URL}/shops/${shopId}/rows/${action}`,
-        put: (shopId: string) :string => `${URL}/shops/${shopId}/rows`,
+        put: (shopId: string): string => `${URL}/shops/${shopId}/rows`,
     },
     auth: {
         login: `${URL}/auth/login`,

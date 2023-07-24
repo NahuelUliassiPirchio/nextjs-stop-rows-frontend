@@ -7,7 +7,11 @@ interface FetchData {
     error: any;
 }
 
-const useFetch = (url: string, options: RequestInit = {}): FetchData => {
+type FetchFunction = {
+  fetchData: () => Promise<any>
+}
+
+function useFetch ({fetchData}: FetchFunction): FetchData {
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -15,15 +19,14 @@ const useFetch = (url: string, options: RequestInit = {}): FetchData => {
   const fetcher = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(url, options);
-      const json = await response.json();
-      setData(json);
+      const resData = await fetchData();
+      setData(resData);
     } catch (err) {
       setError(err);
     } finally {
       setLoading(false);
     }
-  }, [url, options]);
+  }, [fetchData]);
 
   return { fetcher, data, loading, error };
 }

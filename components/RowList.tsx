@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
 import Image from 'next/image';
 
 import { Row } from '@common/types';
-import endpoints from '@common/endpoints';
 import useFetch from '@hooks/useFetch';
 import styles from '@styles/RowList.module.css'
 import RowListLoadingSkeleton from './LoadingSkeletons/RowListLoadingSkeleton';
+import { getRow, updateRow } from '@services/rows';
 
 export default function RowList({rowId, displayIfNull, owner}: {rowId: string, displayIfNull?: boolean, owner?: boolean}){
     const [row, setRow] = useState<Row>();
-    const {data, error, loading, fetcher: fetchRows} = useFetch(endpoints.rows.get(rowId))
+    const {data, error, loading, fetcher: fetchRows} = useFetch({
+      fetchData: () => getRow(rowId)})
 
     useEffect(() => {
         fetchRows()
@@ -24,29 +24,19 @@ export default function RowList({rowId, displayIfNull, owner}: {rowId: string, d
 
     const deleteHandler = (id: string) => {
       if (!row) return;
-      const token = Cookies.get('accessToken');
-      fetch(endpoints.shops.put(row.shop.id.toString()), {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
+      updateRow({
+        row: {
+          ...row,
           customers: row?.customers.filter(item => item.user.id !== id)
-        })
+        }
       })
-      .then(res => {
-          if (!res.ok) {
-            throw new Error('Something went wrong')
-          }
-          return res.json()
-        })
-        .then(_ => {
-          fetchRows()
-        })
-        .catch(err => {
-          console.log(err)
-        })
+      .then(resData => {
+        console.log(resData)
+        fetchRows()
+      })
+      .catch(err => {
+        console.log(err)
+      })
     }
 
     if (loading) return (

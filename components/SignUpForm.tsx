@@ -1,17 +1,18 @@
 import { useState } from "react"
+import Router from "next/router"
+import Link from "next/link"
 import styles from "@styles/Home.module.css"
 import useAuth from "@hooks/useAuth"
-import Router from "next/router"
-import endpoints from "@common/endpoints"
-import Link from "next/link"
+import { signUp } from "@services/auth"
+import { Role } from "@common/types"
 
 export default function SignUpForm() {
-    const [name, setName] = useState('')
-    const [username, setUsername] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
-    const [role, setRole] = useState('customer')
+    const [name, setName] = useState<string>('')
+    const [username, setUsername] = useState<string>('')
+    const [email, setEmail] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
+    const [confirmPassword, setConfirmPassword] = useState<string>('')
+    const [role, setRole] = useState<Role>('customer')
     const [error, setError] = useState('')
 
     const { loading, login } = useAuth()
@@ -22,33 +23,24 @@ export default function SignUpForm() {
         if (!(name && username && email && password && confirmPassword)) return setError('Please fill in all fields')
         if(password !== confirmPassword) return setError('Passwords do not match')
 
-        let res: Response | null = null
-        try {
-            res = await fetch(endpoints.auth.signup, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name,
-                    username,
-                    email,
-                    password,
-                    role
-                })
-            })
-        } catch (error) {
-            return setError('Server error')
-        }
 
-        const data = await res?.json()
-        if (data.error) {
-            setError(data.message)
-        } else {
-            setError('')
-            login(data.refreshToken, data.accessToken.token, data.accessToken.expiresIn)
-            if(!loading) Router.push("/")
-        }
+        signUp({
+            name,
+            username,
+            email,
+            password,
+            role
+        })
+        .then(data=>{
+            if (data.error) {
+                setError(data.message)
+            } else {
+                setError('')
+                login(data.refreshToken, data.accessToken.token, data.accessToken.expiresIn)
+                if(!loading) Router.push("/")
+            }
+        })
+        .catch(error=> setError('Server error'))
     }
 
     return (
@@ -64,7 +56,7 @@ export default function SignUpForm() {
             <label htmlFor="confirmPassword">Confirm password</label>
             <input type="password" name="confirmPassword" id="confirmPassword" onChange={e => setConfirmPassword(e.target.value)} required/>
             <label htmlFor="role">Role</label>
-            <select name="role" id="role" onChange={e => setRole(e.target.value)}>
+            <select name="role" id="role" onChange={e => setRole(e.target.value as Role)}>
                 <option value="customer">Customer</option>
                 <option value="owner">Owner</option>
             </select>

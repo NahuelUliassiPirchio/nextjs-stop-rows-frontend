@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Shop } from "@common/types";
-import endpoints from "@common/endpoints";
 
 import styles from "@styles/ShopForm.module.css";
 import Cookies from "js-cookie";
+import { insertShop } from "@services/shops";
 
-export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any }) {
+export default function ShopForm({ shop, setIsEditing }: { shop?: Shop, setIsEditing?: any }) {
     const [name, setName] = useState(shop?.name || '')
     const [email, setEmail] = useState(shop?.email || '')
     const [description, setDescription] = useState(shop?.description || '')
@@ -13,8 +13,8 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
     const [website, setWebsite] = useState(shop?.website || '')
     const [logo, setLogo] = useState(shop?.logo || '')
     const [address, setAddress] = useState(shop?.address || '')
-    const [lng, setLng] = useState(shop?.location.coordinates[0] || '')
-    const [lat, setLat] = useState(shop?.location.coordinates[1] || '')
+    const [lng, setLng] = useState<number>(shop?.location.coordinates[0] || 0)
+    const [lat, setLat] = useState<number>(shop?.location.coordinates[1] || 0)
 
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
@@ -22,23 +22,16 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        setError('')
+        setSuccess('')
         if (loading) return
 
         setLoading(true)
-        let shopURL = endpoints.shops.getShops
-        let method = 'POST'
-        if (shop) {
-            method = 'PUT'
-            shopURL += `/${shop.id}`
-        }
+        const method = shop ? 'PUT' : 'POST'
 
-        fetch(shopURL, {
+        insertShop({
             method,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${Cookies.get('accessToken')}`                
-            },
-            body: JSON.stringify({
+            shop:{
                 email,
                 name,
                 description,
@@ -46,21 +39,18 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
                 phone,
                 website,
                 address,
-                logo
-            })
-        }).then(res => {
-            setLoading(false)
-            if (res.ok) {
-                setSuccess('Action successful')
-            } else {
-                throw new Error('Error handling shop status')
+                logo,
+                id: shop?.id || undefined
             }
-            console.log(res);
         })
-        .catch(_ => {
-            setLoading(false)
-            setError('Error handling shop status')
+        .then(data=>{
+            if(data.error) throw new Error(data.error)
+            setSuccess(`${data.name} successfully created`)
         })
+        .catch(error => {
+            setError(error.message)
+        })
+        .finally(()=>setLoading(false))
     }
 
     const formStyle = shop ? styles.editForm : styles.createForm
@@ -105,7 +95,7 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
                 type="number"
                 id="lat"
                 value={lat}
-                onChange={(e) => setLat(e.target.value)}
+                onChange={(e) => setLat(parseFloat(e.target.value))}
                 required
             />
             <label htmlFor="lng">Longitude</label>
@@ -113,7 +103,7 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
                 type="number"
                 id="lng"
                 value={lng}
-                onChange={(e) => setLng(e.target.value)}
+                onChange={(e) => setLng(parseFloat(e.target.value))}
                 required
             />
             
@@ -145,7 +135,7 @@ export default function ShopForm({ shop, setEdit }: { shop?: Shop, setEdit?: any
                 shop ? (
                     <div className={styles.updateCancel}>
                         <button type="submit" onClick={handleSubmit}>Update</button>
-                        <button type="button" onClick={() => setEdit(false)}>Cancel</button>
+                        <button type="button" onClick={() => setIsEditing(false)}>Cancel</button>
                     </div>
                 ) : (
                         <button type="submit" onClick={handleSubmit}>Create</button>
