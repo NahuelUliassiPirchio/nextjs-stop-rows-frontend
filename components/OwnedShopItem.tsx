@@ -25,6 +25,7 @@ export default function OwnedShopItem({ shop }: { shop: Shop }) {
       if (shop.row) {
         fetcher();
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [shop.row]);
   
     useEffect(() => {
