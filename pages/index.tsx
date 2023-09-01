@@ -18,7 +18,7 @@ export default function LandingPage() {
                 <li>
                     <Link href='/app'>App</Link>
                 </li>
-                <li><Link href='/stores'>Stores</Link></li>
+                <li><Link href='/shops'>Shops</Link></li>
                 <li><Link href='/#about'>About</Link></li>
             </ul>
             <Link className={styles.signInButton} href="/login">Sign in</Link>
@@ -30,6 +30,10 @@ export default function LandingPage() {
                 <Link className={styles.appLink} href='/app'>
                     {'Check stores near you >'}
                 </Link>
+                <p>
+                    <b>If you&apos;re a customer</b>, you can create your account and explore your favorite businesses on the map.<br/><br/>
+                    <b>If you&apos;re a store owner</b>, sign up as an owner and register your store on our application. You&apos;ll have the flexibility to set your hours and manage your customers, opening and closing your store as needed.
+                </p>
             </div>
             <figure className={styles.imageContainer}>
                 <Image className={styles.heroImage} src={LandingBG} alt="Background" width={400} height={300}/>

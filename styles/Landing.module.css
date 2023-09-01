@@ -36,7 +36,7 @@
     min-height: 80vh;
     display: flex;
     flex-direction: row;
-    padding: 3rem 2rem;
+    padding: 2rem;
 }
 .main .infoContainer{
     display: flex;
@@ -59,7 +59,7 @@
     color: white;
     font-size: large;
     font-weight: bolder;
-    margin-top: 2rem;
+    margin-top: 1rem;
     background-color: var(--primary-color);
 }
 .main .appLink:hover{
@@ -76,11 +76,17 @@
     width: fit-content;
     height: auto;
 }
+.main p {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+    color: rgb(54, 53, 53);
+}
 
 .footer {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: .5rem;
     gap: 1rem;
     padding: 1rem;
     background-color: #101010;
