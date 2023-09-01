@@ -67,13 +67,14 @@
     scale: 1.05;
 }
 .main .imageContainer {
+    display: flex;
     width: 50%;
     height: 100%;
     padding: 1rem;
 }
 .main .heroImage{
-    align-self: center;
-    width: 100%;
+    width: fit-content;
+    height: auto;
 }
 
 .footer {

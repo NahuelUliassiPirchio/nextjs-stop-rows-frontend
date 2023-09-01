@@ -34,14 +34,15 @@ export default function LandingPage() {
             <figure className={styles.imageContainer}>
                 <Image className={styles.heroImage} src={LandingBG} alt="Background" width={400} height={300}/>
             </figure>
+            
         </main>
         <footer id="about" className={styles.footer}>
                 <h4>Stop Rows</h4>
                 <p>I had this idea when in high school a teacher asked me to do a project and, at that time, I spent large amounts of time sitting in line at the bank. The possible solution that came to me was to make a remote queue system. This is not a real application, it was made for learning purposes.</p>
             <ul className={styles.socialMediaContainer}>
-                <li><Link href='uliassipirchio@gmail.com'>Gmail</Link></li>
-                <li><Link href='https://linkedin.com/in/uliassipirchio'>Linkedin</Link></li>
-                <li><Link href='https://github.com/nahueluliassipirchio'>GitHub</Link></li>
+                <li><Link href='uliassipirchio@gmail.com' target="_blank">Gmail</Link></li>
+                <li><Link href='https://linkedin.com/in/uliassipirchio' target="_blank">LinkedIn</Link></li>
+                <li><Link href='https://github.com/nahueluliassipirchio' target="_blank">GitHub</Link></li>
             </ul>
             <p>Copyright ©2023</p>
         </footer>
