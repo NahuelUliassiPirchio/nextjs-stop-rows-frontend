@@ -37,7 +37,7 @@ export default function SignUpForm() {
             } else {
                 setError('')
                 login(data.refreshToken, data.accessToken.token, data.accessToken.expiresIn)
-                if(!loading) Router.push("/")
+                if(!loading) Router.push("/app")
             }
         })
         .catch(error=> setError('Server error'))

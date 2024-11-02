@@ -14,7 +14,7 @@ export default function Login() {
     
     const {user, loading, login} = useAuth()
 
-    if (user) Router.push("/")
+    if (user) Router.push("/app")
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -33,7 +33,7 @@ export default function Login() {
             else {
                 console.log(data);
                 login(data.refreshToken, data.accessToken.token, data.accessToken.expiresIn)
-                if(!loading) Router.push("/")
+                if(!loading) Router.push("/app")
             }
         })
         .catch(err => {
@@ -57,7 +57,7 @@ export default function Login() {
                 {error && <p className={styles.error}>{error}</p>}
                 <form className={styles.loginForm}>
                     <input type="email" name="email" placeholder="email" ref={emailRef} required/>
-                    <input type="password" name="password" placeholder="*******" ref={passwordRef} required/>
+                    <input type="password" name="password" placeholder="*******" ref={passwordRef} required value={"contra123"}/>
                     <input className={styles.submit} type="submit" onClick={handleSubmit} value="Login"/>
                     <p>{"Don't have an account?"} <Link href="/signup">Sign Up</Link></p>
                 </form>

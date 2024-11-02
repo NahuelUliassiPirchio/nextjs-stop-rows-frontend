@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Shop } from "@common/types";
 
 import styles from "@styles/ShopForm.module.css";
-import Cookies from "js-cookie";
 import { insertShop } from "@services/shops";
 
 export default function ShopForm({ shop, setIsEditing }: { shop?: Shop, setIsEditing?: any }) {

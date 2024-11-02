@@ -134,11 +134,10 @@ export default function CustomersMain() {
             {(!hasMore && shops.length===0 && !error) && (
               <>
                 <h2 className={styles.message}>No stores found in your area</h2>
-                <u><Link className={styles.message} href="/app?all=true"> Find all stores </Link></u>
               </>
             )}
+            <Link className={styles.allStoresButton} href="/app?all=true"> Find all stores 🔎</Link>
           </section>
-
           {
             selectedShop && (
               <div className={styles.shopContainer}>
