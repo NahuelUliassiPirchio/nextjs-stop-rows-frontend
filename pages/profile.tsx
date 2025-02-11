@@ -7,6 +7,11 @@ import Loading from "@components/Loading";
 import styles from "@styles/Profile.module.css";
 import { uploadProfile } from "@services/auth";
 
+
+import backArrow from "public/icons/back-arrow.svg"
+import Link from "next/link";
+import Image from "next/image";
+
 export default function Profile() {
     const { user, loading } = useAuth()
     const [areDisabled, setAreDisabled] = useState(true)
@@ -29,6 +34,9 @@ export default function Profile() {
     
     return (
         <>
+        <Link href={'/app'}>
+            <Image src={backArrow} alt="back arrow" />
+        </Link>
         <Head>
             <title>Profile</title>
         </Head>
@@ -48,7 +56,7 @@ export default function Profile() {
                                 <input type="email" name="email" id="email" defaultValue={user.email} disabled={areDisabled} required/>
                                 <label htmlFor="password">Password</label>
                                 <input type="password" name="password" id="password" defaultValue="********" disabled={areDisabled} required/>
-                                <input type="submit" value="Change" onClick={handleUpdate} hidden={!areDisabled}/>
+                                <input type="submit" value="Edit" onClick={handleUpdate} hidden={!areDisabled}/>
                                 <input type="submit" value="Save" onClick={handleSave} disabled={areDisabled} />
                             </form>
                         </div>

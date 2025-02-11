@@ -36,6 +36,13 @@ export default function CustomersMain() {
   const [page, setPage] = useState(1)
   const {loading: shopsLoading, error, data: shops, hasMore} = useGetShops(page, location, allParam)
 
+  const handleHardRefresh = (e: React.MouseEvent) => {
+    e.preventDefault();
+    Router.push('/app').then(() => {
+      Router.reload();
+    });
+  };
+
   useEffect(() => {
     if (selectedMarker) {
       setSelectedShop(selectedMarker)
@@ -136,7 +143,11 @@ export default function CustomersMain() {
                 <h2 className={styles.message}>No stores found in your area</h2>
               </>
             )}
-            <Link className={styles.allStoresButton} href="/app?all=true"> Find all stores 🔎</Link>
+            {
+              allParam ?
+              <Link className={styles.allStoresButton} href="/app" onClick={handleHardRefresh}> Find stores just in my area 🗺️</Link>:
+              <Link className={styles.allStoresButton} href="/app?all=true"> Find all stores 🔎</Link>
+            }
           </section>
           {
             selectedShop && (
