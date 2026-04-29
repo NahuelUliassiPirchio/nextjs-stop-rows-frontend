@@ -44,7 +44,7 @@ export default function LandingPage() {
                 <h4>Stop Rows</h4>
                 <p>I had this idea when in high school a teacher asked me to do a project and, at that time, I spent large amounts of time sitting in line at the bank. The possible solution that came to me was to make a remote queue system. This is not a real application, it was made for learning purposes.</p>
             <ul className={styles.socialMediaContainer}>
-                <li><Link href='uliassipirchio@gmail.com' target="_blank">Gmail</Link></li>
+                <li><Link href='mailto:uliassipirchio@gmail.com'>Gmail</Link></li>
                 <li><Link href='https://linkedin.com/in/uliassipirchio' target="_blank">LinkedIn</Link></li>
                 <li><Link href='https://github.com/nahueluliassipirchio' target="_blank">GitHub</Link></li>
             </ul>

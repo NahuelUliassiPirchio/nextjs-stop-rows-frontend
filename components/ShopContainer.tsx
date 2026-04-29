@@ -8,7 +8,7 @@ export default function ShopContainer({shop}: {shop: Shop}) {
   return (
     <section className={styles.container}>
       <div className={styles.shop}>
-        <Image className={styles.shopImage} src={shop.logo} alt={shop.name} width={200} height={200} />
+        <Image className={styles.shopImage} src={shop.logo} alt={shop.name} width={200} height={200} unoptimized />
         <div className={styles.shopInfo}>
           <h1>{shop.name}</h1>
           <p className={styles.description}>{shop.description}</p>

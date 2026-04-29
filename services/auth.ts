@@ -7,6 +7,7 @@
 
 import endpoints from "@common/endpoints"
 import Cookies from "js-cookie"
+import { parseResponse } from "./http"
 
 type LoginCredentials = {
     email: string
@@ -30,19 +31,7 @@ export async function login({email, password}: LoginCredentials) {
             password
         })
     })
-    .then(res => {
-        // console.log(email,password)
-        // if (res.status === 401) {
-        //     throw new Error("Invalid credentials")
-        // }
-        // else if (res.status === 500) {
-        //     throw new Error("Server error")
-        // }
-        // else if (res.status === 400) {
-        //     throw new Error("Bad request")
-        // }
-        return res.json()
-    })
+    .then(parseResponse)
 }
 
 export async function getProfile() {
@@ -52,21 +41,12 @@ export async function getProfile() {
             'Authorization': `Bearer ${accessToken}`
         },
     })
-    .then(res => {
-        if (res.status === 401) {
-            throw new Error("Invalid credentials")
-        }
-        else if (res.status === 500) {
-            throw new Error("Server error")
-        }
-        else if (res.status === 400) {
-            throw new Error("Bad request")
-        }
-        return res.json()
-    })
+    .then(parseResponse)
 }
 
 export async function refreshToken() {
+    const refreshToken = Cookies.get("refreshToken")
+
     return await fetch(endpoints.auth.refresh, {
         method: "POST",
         headers: {
@@ -74,7 +54,7 @@ export async function refreshToken() {
             'Content-Type': 'application/json'
         }
     })
-    .then(res => res.json())
+    .then(parseResponse)
 }
 
 export async function uploadProfile({name, username, email}:Profile) {
@@ -92,18 +72,7 @@ export async function uploadProfile({name, username, email}:Profile) {
             email,
         })
     })
-    .then(res=>{
-        if (res.status === 401) {
-            throw new Error("Invalid credentials")
-        }
-        else if (res.status === 500) {
-            throw new Error("Server error")
-        }
-        else if (res.status === 400) {
-            throw new Error("Bad request")
-        }
-        return res.json()
-    })
+    .then(parseResponse)
 }
 
 type SignUpData = {
@@ -123,5 +92,5 @@ export async function signUp(data:SignUpData) {
             ...data
         })
     })
-    .then(res => res.json())
+    .then(parseResponse)
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import endpoints from "@common/endpoints"
 import { Shop } from "@common/types"
+import { parseResponse } from "@services/http"
 
 const limit = 2
 
@@ -21,10 +22,7 @@ export default function useGetShops(page: number, location: {lat: number, lng: n
         fetch(endpoints.shops.getShops + query, {
             signal
         })
-        .then(res=> {
-            if (!res.ok) throw Error(res.statusText)
-            return res.json()
-        })
+        .then(parseResponse)
         .then(jsonData => {
             if (jsonData.data.length < limit) setHasMore(false)
             else setHasMore(true)

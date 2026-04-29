@@ -6,6 +6,7 @@ import styles from '@styles/Menu.module.css';
 
 export default function Menu( {name} ) {
     const [isOpen, setIsOpen] = React.useState(false)
+    const menuRef = React.useRef<HTMLDivElement>(null)
     const { logout } = useAuth()
 
     const handleClick = () => {
@@ -19,9 +20,38 @@ export default function Menu( {name} ) {
 
     const userName = name.split(' ').join('+')
     const userNameUrl = `https://ui-avatars.com/api/?name=${userName}&background=0D8ABC&color=fff&size=64`
+
+    React.useEffect(() => {
+        const handleDocumentClick = (event: MouseEvent) => {
+            if (!menuRef.current?.contains(event.target as Node)) {
+                setIsOpen(false)
+            }
+        }
+
+        const handleEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') setIsOpen(false)
+        }
+
+        document.addEventListener('mousedown', handleDocumentClick)
+        document.addEventListener('keydown', handleEscape)
+
+        return () => {
+            document.removeEventListener('mousedown', handleDocumentClick)
+            document.removeEventListener('keydown', handleEscape)
+        }
+    }, [])
+
     return (
-        <div className={styles.menu}>
-            <Image src={userNameUrl} onClick={handleClick} alt="user" width={64} height={64} />
+        <div className={styles.menu} ref={menuRef}>
+            <button
+                type="button"
+                className={styles.menuButton}
+                onClick={handleClick}
+                aria-expanded={isOpen}
+                aria-label="Open user menu"
+            >
+                <Image src={userNameUrl} alt="" width={64} height={64} />
+            </button>
             {
                 isOpen && (
                     <div className={styles.menuDropdown}>

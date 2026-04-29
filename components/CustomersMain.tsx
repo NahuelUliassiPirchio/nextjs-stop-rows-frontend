@@ -123,8 +123,13 @@ export default function CustomersMain() {
       </Head>
       <div className={styles.container}>
         <aside className={`${styles.aside} ${bottomSheetOpen && styles.open}`}>
-          <button className={styles.toggleBottomSheetButton} onClick={() => setBottomSheetOpen(!bottomSheetOpen)}>
-            <Image src="/icons/collapse-arrow.svg" alt={`${bottomSheetOpen ? 'Open' : 'Close'} bottom sheet`} width={30} height={30} />
+          <button
+            className={styles.toggleBottomSheetButton}
+            onClick={() => setBottomSheetOpen(!bottomSheetOpen)}
+            aria-expanded={bottomSheetOpen}
+            aria-label={bottomSheetOpen ? 'Close shops panel' : 'Open shops panel'}
+          >
+            <Image src="/icons/collapse-arrow.svg" alt="" width={30} height={30} />
           </button>
           <section className={`${styles.shopsContainer} ${selectedShop && styles.hide}`}>
             <h1>Shops</h1>
@@ -145,15 +150,17 @@ export default function CustomersMain() {
             )}
             {
               allParam ?
-              <Link className={styles.allStoresButton} href="/app" onClick={handleHardRefresh}> Find stores just in my area 🗺️</Link>:
-              <Link className={styles.allStoresButton} href="/app?all=true"> Find all stores 🔎</Link>
+              <Link className={styles.allStoresButton} href="/app" onClick={handleHardRefresh}>Find stores near me</Link>:
+              <Link className={styles.allStoresButton} href="/app?all=true">Find all stores</Link>
             }
           </section>
           {
             selectedShop && (
               <div className={styles.shopContainer}>
                 <button
+                  type="button"
                   className={styles.backButton}
+                  aria-label="Back to shops list"
                   onClick={()=>{
                   const shopId = selectedShop.id
                   setSelectedShop(null)
@@ -164,7 +171,7 @@ export default function CustomersMain() {
                     }
                   },300)
                 }}>
-                  <Image src='/icons/back-arrow.svg' width={40} height={40} alt='go back'/>
+                  <Image src='/icons/back-arrow.svg' width={40} height={40} alt=''/>
                 </button>
                 <ShopContainer shop={selectedShop} />
               </div>
@@ -192,7 +199,7 @@ export default function CustomersMain() {
               user?.row && (
                 <div className={styles.activeRowList}>
                   <RowList rowId={user.row} displayIfNull={false} />
-                  <button className={styles.leaveButton} onClick={leaveHandler}>Leave row</button>
+                  <button type="button" className={styles.leaveButton} onClick={leaveHandler}>Leave row</button>
                 </div>
               )
             )

@@ -53,26 +53,30 @@ export default function RowList({rowId, displayIfNull, owner}: {rowId: string, d
     return (
         <div className={styles.row}>
           {displayIfNull && <h2>{row?.shop?.name}</h2>}
-          <button className={styles.refreshButton} onClick={() => fetchRows()}>
-            <Image src="/refresh.svg" alt="refresh" width={20} height={20} />
-            Refresh
-          </button>
-          <h3>Row Status: <p className={ row?.status === 'open' ? styles.openRow : styles.closedRow}>{row ? row.status : 'closed'}</p></h3>
-          {  
-          row?.customers?.length ? (
-            row.customers.map( (item, index) => (
-              <div key={index} className={styles.rowItem}>
-                <p>{index + 1}°</p>
-                <p className={styles.customerName}>{item.user.name}</p>
-                {owner && <button className={styles.deleteButton} onClick={()=>deleteHandler(item.user.id)}>X</button>}
-              </div>
-            ))
-          ) : (
-            !displayIfNull && 
-            (<div className={styles.row}>
-              <p>No customers in this row</p>
-            </div>)
-          )}
+          <div className={styles.rowHeader}>
+            <button type="button" className={styles.refreshButton} onClick={() => fetchRows()}>
+              <Image src="/refresh.svg" alt="" width={20} height={20} />
+              Refresh
+            </button>
+            <h3>Row Status: <p className={ row?.status === 'open' ? styles.openRow : styles.closedRow}>{row ? row.status : 'closed'}</p></h3>
+          </div>
+          <div className={styles.rowCustomers}>
+            {  
+            row?.customers?.length ? (
+              row.customers.map( (item, index) => (
+                <div key={index} className={styles.rowItem}>
+                  <p>{index + 1}°</p>
+                  <p className={styles.customerName}>{item.user.name}</p>
+                  {owner && <button type="button" className={styles.deleteButton} onClick={()=>deleteHandler(item.user.id)} aria-label={`Remove ${item.user.name} from row`}>X</button>}
+                </div>
+              ))
+            ) : (
+              !displayIfNull && 
+              (<div className={styles.rowEmpty}>
+                <p>No customers in this row</p>
+              </div>)
+            )}
+          </div>
       </div>
     )
 }

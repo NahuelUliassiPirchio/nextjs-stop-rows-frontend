@@ -1,84 +1,108 @@
 .shopContainer {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  margin: 1rem;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin: 0;
   background: #fff;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
 }
 
 .shopContainer:hover {
-  transform: scale(1.02);
-  background-color: lightgrey;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  transform: translateY(-2px);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-md);
 }
 
 .shopContainer img {
-  width: 100%;
-  height: 100%;
+  width: 5rem;
+  height: 5rem;
+  flex: 0 0 5rem;
   object-fit: cover;
-  border-radius: 12px;
-  max-width: 200px;
+  border-radius: var(--radius-md);
+}
+
+.infoContainer {
+  min-width: 0;
+  flex: 1;
 }
 
 .shopContainer h2 {
-  font-size: 1.5rem;
-  font-weight: 500;
-  line-height: 1.75rem;
+  font-size: 1.15rem;
+  font-weight: 900;
+  line-height: 1.2;
   margin: 0;
-  padding: 1rem;
-  color: black;
+  padding: 0;
+  color: var(--color-text);
 }
 
 .shopContainer p {
-  font-size: 1rem;
+  font-size: 0.92rem;
   font-weight: 400;
-  line-height: 1.25rem;
-  margin: 0;
-  padding: 1rem;
-  color: black;
+  line-height: 1.45;
+  margin: var(--space-1) 0 0;
+  padding: 0;
+  color: var(--color-text-muted);
 }
 
 .buttonContainer {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  padding: 1rem;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: var(--space-3) 0 0;
 }
 
 .buttonContainer a {
-  color: black;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 900;
 }
 
 .buttonContainer a:hover {
-  text-decoration: underline;
+  background: var(--color-border);
+  color: var(--color-text);
+  transform: translateY(-1px);
 }
 
 .buttonContainer button {
-  background-color: #f5f5f5;
-  color: black;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 0.5rem 1rem;
-  margin: 0.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 900;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
 }
 
 .buttonContainer button:hover {
-  background-color: gray;
-  color: white;
+  background-color: var(--primary-color-dark);
+  transform: translateY(-1px);
 }
 
 @media (max-width: 768px) {
   .shopContainer {
-    flex-direction: row;
+    align-items: flex-start;
+    padding: var(--space-3);
+  }
+
+  .shopContainer img {
+    width: 4.5rem;
+    height: 4.5rem;
+    flex-basis: 4.5rem;
   }
 }

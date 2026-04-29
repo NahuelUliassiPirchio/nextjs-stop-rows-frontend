@@ -7,10 +7,11 @@
 import endpoints from "@common/endpoints"
 import { NewShop, Shop } from "@common/types"
 import Cookies from "js-cookie"
+import { parseResponse } from "./http"
 
 export async function  getShop(id: string){
     const res = await fetch(endpoints.shops.get(id))
-    return await res.json()
+    return await parseResponse(res)
 }
 
 type InsertShop = {
@@ -47,7 +48,5 @@ export async function insertShop({method, shop}: InsertShop) {
             logo
         })
     })
-    .then(res => {
-        return res.json()
-    })   
+    .then(parseResponse)
 }

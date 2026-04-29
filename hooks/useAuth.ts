@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Cookie from "js-cookie";
 import { getProfile, refreshToken as refreshAccessToken } from "@services/auth";
+import { ApiError } from "@services/http";
 
 const useAuth = () => {
     const [user, setUser] = useState<any>(null);
@@ -42,7 +43,7 @@ const useAuth = () => {
             setUser(data)
         })
         .catch(err => {
-            if (err.message === "Not authorized") {
+            if (err instanceof ApiError && err.status === 401) {
                 logout()
             }                
         })

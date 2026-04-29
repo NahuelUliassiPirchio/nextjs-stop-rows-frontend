@@ -6,6 +6,7 @@
 import endpoints from "@common/endpoints";
 import { Row } from "@common/types";
 import Cookies from "js-cookie";
+import { parseResponse } from "./http";
 
 export async function leaveRow(rowId: string) {
     const token = Cookies.get('accessToken')
@@ -16,7 +17,7 @@ export async function leaveRow(rowId: string) {
             'Authorization': `Bearer ${token}`
         },
     })
-    return response.json()
+    return parseResponse(response)
 }
 
 export async function joinRow(rowId:string) {
@@ -29,10 +30,7 @@ export async function joinRow(rowId:string) {
         'Authorization': `Bearer ${token}`
       },
     })
-    if (!response.ok) {
-      throw new Error('Something went wrong')
-    }
-    return response.json()
+    return parseResponse(response)
 }
 
 export async function getRow(rowId:string) {
@@ -42,7 +40,7 @@ export async function getRow(rowId:string) {
         'Content-Type': 'application/json',
     }
   })
-  .then(res=> res.json())
+  .then(parseResponse)
 }
 type EditRow = {
   row : Row
@@ -62,7 +60,7 @@ export async function updateRow({row}: EditRow) {
       status
     })
   })
-  .then(res => res.json())
+  .then(parseResponse)
 }
 
 export async function applyRowActions({shopId, action}:{action:string, shopId: string}) {
@@ -80,11 +78,6 @@ export async function applyRowActions({shopId, action}:{action:string, shopId: s
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     },
-  }).then(res=>{
-    if (!res.ok) {
-      throw new Error('Something went wrong');
-    }
-    return res.json();
-  })
+  }).then(parseResponse)
   
 }

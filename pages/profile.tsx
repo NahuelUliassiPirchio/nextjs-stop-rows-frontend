@@ -24,18 +24,23 @@ export default function Profile() {
     }
 
     const handleSave = async (e) => {
+        e.preventDefault()
+        const form = e.currentTarget.form as HTMLFormElement | null
+
+        if (!form) return
+
         await uploadProfile({
-            name: e.target.name.value,
-            username: e.target.username.value,
-            email: e.target.email.value,
+            name: (form.elements.namedItem('name') as HTMLInputElement).value,
+            username: (form.elements.namedItem('username') as HTMLInputElement).value,
+            email: (form.elements.namedItem('email') as HTMLInputElement).value,
         })
         .catch(err=> alert(err.message))
     }
     
     return (
         <>
-        <Link href={'/app'}>
-            <Image src={backArrow} alt="back arrow" />
+        <Link href={'/app'} aria-label="Back to app">
+            <Image src={backArrow} alt="" />
         </Link>
         <Head>
             <title>Profile</title>

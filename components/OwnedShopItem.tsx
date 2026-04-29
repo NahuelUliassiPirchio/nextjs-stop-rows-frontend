@@ -101,14 +101,19 @@ export default function OwnedShopItem({ shop }: { shop: Shop }) {
                 Start
               </button>
             )}
-            <Image
+            <button
+              type="button"
               className={styles.edit}
-              src="/icons/edit.svg"
-              alt="Edit Row"
-              width={20}
-              height={20}
               onClick={() => setIsEditing(!isEditing)}
-            />
+              aria-label="Edit shop"
+            >
+              <Image
+                src="/icons/edit.svg"
+                alt=""
+                width={20}
+                height={20}
+              />
+            </button>
             {isEditing && <ShopForm shop={shop} setIsEditing={setIsEditing} />}
           </div>
         </li>
