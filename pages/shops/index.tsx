@@ -13,9 +13,10 @@ import styles from '@styles/ShopsPage.module.css'
 export default function ShopsPage() {
     const [page, setPage] = useState(1)
     const [selectedCategory, setSelectedCategory] = useState('')
+    const [search, setSearch] = useState('')
     const [selectedShop, setSelectedShop] = useState<Shop | null>(null)
     const location = {lat: -34.609607, lng: -58.388660}
-    const {loading, error, data: shops, hasMore} = useGetShops(page, location, true, selectedCategory)
+    const {loading, error, data: shops, hasMore} = useGetShops(page, location, true, selectedCategory, search)
     const {categories, loading: categoriesLoading, error: categoriesError} = useCategories()
 
     const observer = useRef<IntersectionObserver>()
@@ -38,6 +39,18 @@ export default function ShopsPage() {
         setPage(1)
     }
 
+    const handleSearchChange = (event) => {
+        setSearch(event.target.value)
+        setSelectedShop(null)
+        setPage(1)
+    }
+
+    const handleClearSearch = () => {
+        setSearch('')
+        setSelectedShop(null)
+        setPage(1)
+    }
+
     return (
         <>
             <Head>
@@ -52,6 +65,30 @@ export default function ShopsPage() {
                             <h1>Shops</h1>
                             <p className={styles.description}>Find a store, check its page, or join the active row.</p>
                         </div>
+                        <label className={styles.categoryFilter} htmlFor="shop-search">
+                            <span>Search</span>
+                            <div className={styles.searchInput}>
+                                <input
+                                    id="shop-search"
+                                    type="search"
+                                    value={search}
+                                    onChange={handleSearchChange}
+                                    placeholder="Search by shop name"
+                                    spellCheck={false}
+                                    autoCorrect="off"
+                                    autoCapitalize="none"
+                                />
+                                {search && (
+                                    <button
+                                        type="button"
+                                        aria-label="Clear search"
+                                        onClick={handleClearSearch}
+                                    >
+                                        ×
+                                    </button>
+                                )}
+                            </div>
+                        </label>
                         <label className={styles.categoryFilter} htmlFor="category">
                             <span>Category</span>
                             <select

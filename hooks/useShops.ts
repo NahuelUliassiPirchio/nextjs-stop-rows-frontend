@@ -4,12 +4,24 @@ import { Shop } from "@common/types"
 import { parseResponse } from "@services/http"
 
 const limit = 2
+const searchDebounceMs = 350
 
-export default function useGetShops(page: number, location: {lat: number, lng: number}, all, category = ''){
+export default function useGetShops(page: number, location: {lat: number, lng: number}, all, category = '', search = ''){
     const [hasMore,setHasMore] = useState(false)
     const [error,setError] = useState('')
     const [loading,setLoading] = useState(true)
     const [data,setData] = useState<Array<Shop>>([])
+    const [debouncedSearch, setDebouncedSearch] = useState(search)
+
+    useEffect(() => {
+        const timeout = window.setTimeout(() => {
+            setDebouncedSearch(search)
+        }, searchDebounceMs)
+
+        return () => {
+            window.clearTimeout(timeout)
+        }
+    }, [search])
 
     useEffect(()=> {
         setLoading(true)
@@ -32,6 +44,10 @@ export default function useGetShops(page: number, location: {lat: number, lng: n
 
         if (category) {
             params.set('category', category)
+        }
+
+        if (debouncedSearch.trim()) {
+            params.set('search', debouncedSearch.trim())
         }
 
         fetch(`${endpoints.shops.getShops}?${params.toString()}`, {
@@ -66,7 +82,7 @@ export default function useGetShops(page: number, location: {lat: number, lng: n
         return () => {
             controller.abort()
         }
-    },[all, category, location.lat, location.lng, page])
+    },[all, category, debouncedSearch, location.lat, location.lng, page])
 
     return {loading, error, hasMore, data}
 }

@@ -36,7 +36,8 @@ export default function CustomersMain() {
   const allParam = Router.query.all
   const [page, setPage] = useState(1)
   const [selectedCategory, setSelectedCategory] = useState('')
-  const {loading: shopsLoading, error, data: shops, hasMore} = useGetShops(page, location, allParam, selectedCategory)
+  const [search, setSearch] = useState('')
+  const {loading: shopsLoading, error, data: shops, hasMore} = useGetShops(page, location, allParam, selectedCategory, search)
   const {categories, loading: categoriesLoading, error: categoriesError} = useCategories()
 
   const handleHardRefresh = (e: React.MouseEvent) => {
@@ -77,6 +78,20 @@ export default function CustomersMain() {
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value)
+    setSelectedShop(null)
+    setSelectedMarker(null)
+    setPage(1)
+  }
+
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value)
+    setSelectedShop(null)
+    setSelectedMarker(null)
+    setPage(1)
+  }
+
+  const handleClearSearch = () => {
+    setSearch('')
     setSelectedShop(null)
     setSelectedMarker(null)
     setPage(1)
@@ -143,6 +158,30 @@ export default function CustomersMain() {
           </button>
           <section className={`${styles.shopsContainer} ${selectedShop && styles.hide}`}>
             <h1>Shops</h1>
+            <label className={styles.categoryFilter} htmlFor="app-shop-search">
+              <span>Search</span>
+              <div className={styles.searchInput}>
+                <input
+                  id="app-shop-search"
+                  type="search"
+                  value={search}
+                  onChange={handleSearchChange}
+                  placeholder="Search by shop name"
+                  spellCheck={false}
+                  autoCorrect="off"
+                  autoCapitalize="none"
+                />
+                {search && (
+                  <button
+                    type="button"
+                    aria-label="Clear search"
+                    onClick={handleClearSearch}
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+            </label>
             <label className={styles.categoryFilter} htmlFor="app-category">
               <span>Category</span>
               <select
