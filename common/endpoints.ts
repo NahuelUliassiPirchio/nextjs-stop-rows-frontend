@@ -26,6 +26,10 @@ const endpoints = {
         applyAction: (shopId: string, action: string | null) :string => `${URL}/shops/${shopId}/rows/${action}`,
         put: (shopId: string): string => `${URL}/shops/${shopId}/rows`,
     },
+    categories: {
+        getCategories: `${URL}/categories`,
+        get: (categoryId: string): string => `${URL}/categories/${categoryId}`,
+    },
     auth: {
         login: `${URL}/auth/login`,
         signup: `${URL}/auth/signup`,

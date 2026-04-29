@@ -7,13 +7,16 @@ import ShopContainer from "@components/ShopContainer";
 import ShopItem from "@components/ShopItem";
 import ShopItemLoadingSkeleton from "@components/LoadingSkeletons/ShopItem.LoadingSkeleton";
 import useGetShops from "@hooks/useShops";
+import useCategories from "@hooks/useCategories";
 import styles from '@styles/ShopsPage.module.css'
 
 export default function ShopsPage() {
     const [page, setPage] = useState(1)
+    const [selectedCategory, setSelectedCategory] = useState('')
     const [selectedShop, setSelectedShop] = useState<Shop | null>(null)
     const location = {lat: -34.609607, lng: -58.388660}
-    const {loading, error, data: shops, hasMore} = useGetShops(page, location, true)
+    const {loading, error, data: shops, hasMore} = useGetShops(page, location, true, selectedCategory)
+    const {categories, loading: categoriesLoading, error: categoriesError} = useCategories()
 
     const observer = useRef<IntersectionObserver>()
     const lastShopElementRef = useCallback((node: Element) => {
@@ -29,6 +32,12 @@ export default function ShopsPage() {
         if(node) observer.current.observe(node)
     }, [hasMore, loading])
 
+    const handleCategoryChange = (event) => {
+        setSelectedCategory(event.target.value)
+        setSelectedShop(null)
+        setPage(1)
+    }
+
     return (
         <>
             <Head>
@@ -43,6 +52,21 @@ export default function ShopsPage() {
                             <h1>Shops</h1>
                             <p className={styles.description}>Find a store, check its page, or join the active row.</p>
                         </div>
+                        <label className={styles.categoryFilter} htmlFor="category">
+                            <span>Category</span>
+                            <select
+                                id="category"
+                                value={selectedCategory}
+                                onChange={handleCategoryChange}
+                                disabled={categoriesLoading}
+                            >
+                                <option value="">All categories</option>
+                                {categories.map(category => (
+                                    <option key={category.id} value={category.id}>{category.name}</option>
+                                ))}
+                            </select>
+                        </label>
+                        {categoriesError && <p className={styles.filterError}>Could not load categories</p>}
                     </div>
 
                     {error && <h2 className={styles.message}>Error loading shops</h2>}

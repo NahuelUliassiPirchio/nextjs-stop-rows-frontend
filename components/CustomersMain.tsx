@@ -11,6 +11,7 @@ import ShopItem from './ShopItem';
 import useAuth from '@hooks/useAuth';
 import Menu from './Menu';
 import useGetShops from '@hooks/useShops';
+import useCategories from '@hooks/useCategories';
 import RowList from './RowList';
 import Loading from './Loading';
 import Advertisement from './Advertisement';
@@ -34,7 +35,9 @@ export default function CustomersMain() {
   
   const allParam = Router.query.all
   const [page, setPage] = useState(1)
-  const {loading: shopsLoading, error, data: shops, hasMore} = useGetShops(page, location, allParam)
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const {loading: shopsLoading, error, data: shops, hasMore} = useGetShops(page, location, allParam, selectedCategory)
+  const {categories, loading: categoriesLoading, error: categoriesError} = useCategories()
 
   const handleHardRefresh = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -70,6 +73,13 @@ export default function CustomersMain() {
     if (shopItem) {
       shopItem.scrollIntoView({behavior: 'smooth'})
     }
+  }
+
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value)
+    setSelectedShop(null)
+    setSelectedMarker(null)
+    setPage(1)
   }
 
   const handleSideBar = () => {
@@ -133,6 +143,21 @@ export default function CustomersMain() {
           </button>
           <section className={`${styles.shopsContainer} ${selectedShop && styles.hide}`}>
             <h1>Shops</h1>
+            <label className={styles.categoryFilter} htmlFor="app-category">
+              <span>Category</span>
+              <select
+                id="app-category"
+                value={selectedCategory}
+                onChange={handleCategoryChange}
+                disabled={categoriesLoading}
+              >
+                <option value="">All categories</option>
+                {categories.map(category => (
+                  <option key={category.id} value={category.id}>{category.name}</option>
+                ))}
+              </select>
+            </label>
+            {categoriesError && <p className={styles.filterError}>Could not load categories</p>}
             {
               error && <h2 className={styles.message}>Error loading shops</h2>
             }

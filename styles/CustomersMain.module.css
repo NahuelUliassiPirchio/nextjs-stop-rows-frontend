@@ -33,6 +33,44 @@
   color: var(--color-text);
 }
 
+.categoryFilter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: 0 var(--space-2);
+  color: var(--color-text);
+  font-weight: 900;
+}
+
+.categoryFilter span {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.categoryFilter select {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.categoryFilter select:disabled {
+  cursor: wait;
+  color: var(--color-text-soft);
+}
+
+.filterError {
+  padding: 0 var(--space-2);
+  color: var(--color-danger);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
 .hide {
   display: none;
 }

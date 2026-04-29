@@ -12,6 +12,7 @@ type Shop = {
     coordinates: number[];
   }
   row: string;
+  categories: string[];
 }
 
 type NewShop = {
@@ -24,6 +25,11 @@ type NewShop = {
   website: string
   address: string
   logo: string
+}
+
+type Category = {
+  id: string;
+  name: string;
 }
 
 type Row = {
@@ -48,4 +54,4 @@ type Customer = {
   user: User;
 }
 
-export { Shop, NewShop, Row, Role }
+export { Shop, NewShop, Row, Role, Category }
