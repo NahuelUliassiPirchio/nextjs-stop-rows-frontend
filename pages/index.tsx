@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
 
-import StopRowsLogo from '@public/images/StopRowsLogo.svg'
+import Navbar from "@components/Navbar";
 import LandingBG from '@public/images/LandingBG.png'
 import styles from '@styles/Landing.module.css'
 
@@ -12,17 +12,7 @@ export default function LandingPage() {
         <Head>
             <title>Stop Rows</title>
         </Head>
-        <header className={styles.header}>
-            <Image className={styles.logo} src={StopRowsLogo} alt="Stop Rows' logo" width={90} height={90} />
-            <ul className={styles.linksContainer}>
-                <li>
-                    <Link href='/app'>App</Link>
-                </li>
-                <li><Link href='/shops'>Shops</Link></li>
-                <li><Link href='/#about'>About</Link></li>
-            </ul>
-            <Link className={styles.signInButton} href="/login">Sign in</Link>
-        </header>
+        <Navbar />
         <main className={styles.main}>
             <div className={styles.infoContainer}>
                 <h1>Use your time more efficiently and enjoy your life</h1>

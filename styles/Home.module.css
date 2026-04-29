@@ -98,6 +98,24 @@
   transform: translateY(-1px);
 }
 
+.submit:disabled {
+  background-color: var(--primary-color-dark);
+  cursor: wait;
+  opacity: 0.8;
+  transform: none;
+}
+
+.container form input:disabled {
+  cursor: not-allowed;
+}
+
+.loadingMessage {
+  margin-top: calc(-1 * var(--space-2));
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .title {
   font-size: clamp(2.5rem, 8vw, 4rem);
   font-weight: 900;

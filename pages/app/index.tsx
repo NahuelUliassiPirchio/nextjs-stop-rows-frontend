@@ -6,7 +6,13 @@ import Loading from '@components/Loading'
 export default function Home() {
   const { user, loading } = useAuth()
 
-  if (loading) return <Loading/>
+  if (loading) return (
+    <Loading
+      fullScreen
+      title="Signing you in"
+      message="We are getting your account and rows ready."
+    />
+  )
 
   if (!user || user.role === "customer") 
     return <CustomersMain />
