@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { Shop } from "@common/types";
 
+import LocationPicker from "./LocationPicker";
 import styles from "@styles/ShopForm.module.css";
 import { insertShop } from "@services/shops";
+
+const defaultLocation = {lat: -34.609607, lng: -58.388660}
 
 export default function ShopForm({ shop, setIsEditing }: { shop?: Shop, setIsEditing?: any }) {
     const [name, setName] = useState(shop?.name || '')
@@ -12,12 +15,41 @@ export default function ShopForm({ shop, setIsEditing }: { shop?: Shop, setIsEdi
     const [website, setWebsite] = useState(shop?.website || '')
     const [logo, setLogo] = useState(shop?.logo || '')
     const [address, setAddress] = useState(shop?.address || '')
-    const [lng, setLng] = useState<number>(shop?.location.coordinates[0] || 0)
-    const [lat, setLat] = useState<number>(shop?.location.coordinates[1] || 0)
+    const [lng, setLng] = useState<number>(shop?.location.coordinates[0] || defaultLocation.lng)
+    const [lat, setLat] = useState<number>(shop?.location.coordinates[1] || defaultLocation.lat)
 
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
     const [loading, setLoading] = useState(false)
+
+    const handleLocationChange = (location: {lat: number, lng: number}) => {
+        setLat(Number(location.lat.toFixed(6)))
+        setLng(Number(location.lng.toFixed(6)))
+    }
+
+    const handleCoordinateInput = (value: string, onChange: (coordinate: number) => void) => {
+        const coordinate = parseFloat(value)
+
+        if (!Number.isNaN(coordinate)) {
+            onChange(coordinate)
+        }
+    }
+
+    const handleUseCurrentLocation = () => {
+        if (!window.navigator.geolocation) {
+            setError('Geolocation is not available in this browser')
+            return
+        }
+
+        window.navigator.geolocation.getCurrentPosition((position) => {
+            handleLocationChange({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+            })
+        }, () => {
+            setError('Unable to get your current location')
+        })
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -83,26 +115,39 @@ export default function ShopForm({ shop, setIsEditing }: { shop?: Shop, setIsEdi
             <label htmlFor="address">Address</label>
             <input
                 type="text"
-                id="location"
+                id="address"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 required
             />
 
+            <div className={styles.locationPicker}>
+                <div className={styles.locationHeader}>
+                    <div>
+                        <h2>Shop location</h2>
+                        <p>Click the map or drag the marker to set the coordinates.</p>
+                    </div>
+                    <button type="button" onClick={handleUseCurrentLocation}>Use my location</button>
+                </div>
+                <LocationPicker value={{lat, lng}} onChange={handleLocationChange} />
+            </div>
+
             <label htmlFor="lat">Latitude</label>
             <input
                 type="number"
                 id="lat"
+                step="any"
                 value={lat}
-                onChange={(e) => setLat(parseFloat(e.target.value))}
+                onChange={(e) => handleCoordinateInput(e.target.value, setLat)}
                 required
             />
             <label htmlFor="lng">Longitude</label>
             <input
                 type="number"
                 id="lng"
+                step="any"
                 value={lng}
-                onChange={(e) => setLng(parseFloat(e.target.value))}
+                onChange={(e) => handleCoordinateInput(e.target.value, setLng)}
                 required
             />
             
