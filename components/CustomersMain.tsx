@@ -60,13 +60,13 @@ export default function CustomersMain() {
     }
   }, [selectedShop])
 
-  const handleMarkerClick = (shop:Shop) => {
+  const handleMarkerClick = useCallback((shop:Shop) => {
     setSelectedMarker(shop)
     const shopItem = document.getElementById(`shop-${shop.id}`)
     if (shopItem) {
       shopItem.scrollIntoView({behavior: 'smooth'})
     }
-  }
+  }, [])
 
   const handleShopClick = (shop:Shop) => {
     setSelectedShop(shop)
