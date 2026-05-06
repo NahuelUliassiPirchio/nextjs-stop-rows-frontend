@@ -6,7 +6,7 @@ import { parseResponse } from "@services/http"
 const limit = 2
 const searchDebounceMs = 350
 
-export default function useGetShops(page: number, location: {lat: number, lng: number}, all, category = '', search = ''){
+export default function useGetShops(page: number, location: {lat: number, lng: number}, all, category = '', search = '', enabled = true){
     const [hasMore,setHasMore] = useState(false)
     const [error,setError] = useState('')
     const [loading,setLoading] = useState(true)
@@ -24,6 +24,7 @@ export default function useGetShops(page: number, location: {lat: number, lng: n
     }, [search])
 
     useEffect(()=> {
+        if (!enabled) return
         setLoading(true)
         setError('')
         if (page === 1) setData([])
@@ -82,7 +83,7 @@ export default function useGetShops(page: number, location: {lat: number, lng: n
         return () => {
             controller.abort()
         }
-    },[all, category, debouncedSearch, location.lat, location.lng, page])
+    },[all, category, debouncedSearch, enabled, location.lat, location.lng, page])
 
     return {loading, error, hasMore, data}
 }

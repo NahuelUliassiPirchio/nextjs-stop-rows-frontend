@@ -28,6 +28,7 @@ export default function CustomersMain() {
 
   const initialLocation = {lat: -34.609607, lng: -58.388660}
   const [isLoaded, setIsLoaded] = useState(false)
+  const [locationReady, setLocationReady] = useState(false)
   const [center, setCenter] = useState(initialLocation)
   const [location, setLocation] = useState(initialLocation)
 
@@ -37,7 +38,7 @@ export default function CustomersMain() {
   const [page, setPage] = useState(1)
   const [selectedCategory, setSelectedCategory] = useState('')
   const [search, setSearch] = useState('')
-  const {loading: shopsLoading, error, data: shops, hasMore} = useGetShops(page, location, allParam, selectedCategory, search)
+  const {loading: shopsLoading, error, data: shops, hasMore} = useGetShops(page, location, allParam, selectedCategory, search, locationReady)
   const {categories, loading: categoriesLoading, error: categoriesError} = useCategories()
 
   const handleHardRefresh = (e: React.MouseEvent) => {
@@ -102,17 +103,18 @@ export default function CustomersMain() {
   }
 
   useEffect(() => {
-    if(isLoaded){
-      window.navigator.geolocation.getCurrentPosition((position) => {
-          setCenter({lat: position.coords.latitude, lng: position.coords.longitude})
-          setLocation({lat: position.coords.latitude, lng: position.coords.longitude})
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setCenter({lat: position.coords.latitude, lng: position.coords.longitude})
+        setLocation({lat: position.coords.latitude, lng: position.coords.longitude})
+        setLocationReady(true)
       },
-      (error) => {
-        console.log(error)
+      () => {
+        setLocationReady(true)
       },
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
-    }
-  }, [isLoaded])
+      {enableHighAccuracy: true, timeout: 5000, maximumAge: 1000}
+    )
+  }, [])
 
   const observer = useRef<IntersectionObserver>()
   const lastShopElementRef = useCallback((node: Element) => {
