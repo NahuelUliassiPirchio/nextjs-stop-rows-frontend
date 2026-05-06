@@ -206,6 +206,7 @@
 .activeRowList {
   display: flex;
   flex-direction: column;
+  gap: var(--space-3);
   width: min(25rem, calc(100% - 2rem));
   background-color: rgba(255, 255, 255, 0.94);
   color: var(--color-text);
@@ -217,18 +218,30 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
-  min-height: 30%;
   max-height: 50%;
-  overflow: hidden;
+  overflow-y: auto;
   backdrop-filter: blur(16px);
 }
 
-.activeRowList > div {
+.activeRowItem {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.activeRowItem:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.activeRowItem > div {
   flex: 1;
   min-height: 0;
 }
 
-.activeRowList > div > div:last-child {
+.activeRowItem > div > div:last-child {
   flex: 1;
   min-height: 0;
   overflow-y: auto;

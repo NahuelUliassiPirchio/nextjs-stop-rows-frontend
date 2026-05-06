@@ -23,7 +23,7 @@ export default function ShopContainer({shop}: {shop: Shop}) {
       </div>
       <div className={styles.shopRow}>
         <h2>Row</h2>
-        <RowList rowId={shop.row} />
+        <RowList key={shop.row} rowId={shop.row} />
       </div>
     </section>
   )

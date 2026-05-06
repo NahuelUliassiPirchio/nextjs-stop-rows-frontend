@@ -45,6 +45,7 @@ type User = {
   name: string;
   role: string;
   id: string;
+  row: string[];
 }
 
 type Role = 'customer'|'owner'

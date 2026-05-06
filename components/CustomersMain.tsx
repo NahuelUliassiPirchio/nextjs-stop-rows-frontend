@@ -129,8 +129,8 @@ export default function CustomersMain() {
   }, [hasMore, shopsLoading])
 
 
-  const leaveHandler = async () => {
-    leaveRow(user?.row)
+  const leaveHandler = async (rowId: string) => {
+    leaveRow(rowId)
     .then(() => {
       alert('You have left the row')
       Router.reload()
@@ -260,10 +260,14 @@ export default function CustomersMain() {
           </div>
           {
             loading ? <Loading/> : (
-              user?.row && (
+              user?.row?.length > 0 && (
                 <div className={styles.activeRowList}>
-                  <RowList rowId={user.row} displayIfNull={false} />
-                  <button type="button" className={styles.leaveButton} onClick={leaveHandler}>Leave row</button>
+                  {user.row.map((rowId: string) => (
+                    <div key={rowId} className={styles.activeRowItem}>
+                      <RowList rowId={rowId} displayIfNull={true} />
+                      <button type="button" className={styles.leaveButton} onClick={() => leaveHandler(rowId)}>Leave row</button>
+                    </div>
+                  ))}
                 </div>
               )
             )
