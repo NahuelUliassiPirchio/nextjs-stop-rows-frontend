@@ -43,7 +43,7 @@ export async function getRow(rowId:string) {
   .then(parseResponse)
 }
 type EditRow = {
-  row : Row
+  row: Omit<Row, 'customers'> & { customers: Array<{ user: string; date: Date }> }
 }
 export async function updateRow({row}: EditRow) {
   const token = Cookies.get('accessToken');

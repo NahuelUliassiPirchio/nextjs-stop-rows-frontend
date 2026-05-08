@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Router from 'next/router';
+import Cookies from 'js-cookie';
 
 import { Row } from '@common/types';
 import useFetch from '@hooks/useFetch';
+import useAuth from '@hooks/useAuth';
 import styles from '@styles/RowList.module.css'
 import RowListLoadingSkeleton from './LoadingSkeletons/RowListLoadingSkeleton';
-import { getRow, updateRow } from '@services/rows';
+import { getRow, joinRow, updateRow } from '@services/rows';
 
-export default function RowList({rowId, displayIfNull, owner}: {rowId: string, displayIfNull?: boolean, owner?: boolean}){
+export default function RowList({rowId, displayIfNull, owner, joinable}: {rowId: string, displayIfNull?: boolean, owner?: boolean, joinable?: boolean}){
     const [row, setRow] = useState<Row>();
+    const { user } = useAuth();
     const {data, error, loading, fetcher: fetchRows} = useFetch({
       fetchData: () => getRow(rowId)})
 
@@ -23,12 +27,27 @@ export default function RowList({rowId, displayIfNull, owner}: {rowId: string, d
         }
     }, [data])
 
+    const joinHandler = () => {
+      if (!Cookies.get('accessToken')) {
+        Router.push('/login')
+        return
+      }
+      joinRow(rowId)
+        .then(() => fetchRows())
+        .catch(err => console.log(err))
+    }
+
+    const isAlreadyInRow = user && row?.customers.some(c => c.user.id === user.id);
+    const canJoin = joinable && row?.status === 'open' && !isAlreadyInRow;
+
     const deleteHandler = (id: string) => {
       if (!row) return;
       updateRow({
         row: {
           ...row,
-          customers: row?.customers.filter(item => item.user.id !== id)
+          customers: row?.customers
+            .filter(item => item.user.id !== id)
+            .map(item => ({ user: item.user.id, date: item.date }))
         }
       })
       .then(resData => {
@@ -63,8 +82,13 @@ export default function RowList({rowId, displayIfNull, owner}: {rowId: string, d
               Refresh
             </button>
           </div>
+          {canJoin && (
+            <button type="button" className={styles.joinButton} onClick={joinHandler}>
+              Join row
+            </button>
+          )}
           <div className={styles.rowCustomers}>
-            {  
+            {
             row?.customers?.length ? (
               row.customers.map( (item, index) => (
                 <div key={index} className={`${styles.rowItem} ${index === 0 ? styles.firstRowItem : ''}`}>
@@ -74,7 +98,7 @@ export default function RowList({rowId, displayIfNull, owner}: {rowId: string, d
                 </div>
               ))
             ) : (
-              !displayIfNull && 
+              !displayIfNull &&
               (<div className={styles.rowEmpty}>
                 <p>No customers in this row</p>
               </div>)
